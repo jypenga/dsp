@@ -17,11 +17,11 @@ a {
 }
 
 #app-box {
+  position: absolute;
   min-height: 100%;
   min-width: 100%;
   margin: 0px;
   padding: 0px;
-  position: absolute;
 }
 
 /* register header */
@@ -138,11 +138,13 @@ a {
 
 /* body */
 .app-body {
-  top: 35%;
   position: absolute;
+  top: 35%;
   color:#2A547E;
   min-width: inherit;
   min-height: auto;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .app-body h2 {
@@ -153,12 +155,13 @@ a {
 
 .app-body p {
   font-size: 25pt;
+  margin: 10%;
 }
 
 .app-body button {
   position: absolute;
-  font-size: 30pt;
-  font-weight: 300;
+  font-size: 23pt;
+  font-weight: 700;
   background-image: linear-gradient(to top, #3B72FF, #3b9aff);
   color: white;
   width: 85%;
@@ -192,12 +195,14 @@ input[type=checkbox] {
 
 #app-free-btn {
   color: white;
-  background-color: orange;
+  text-decoration: none;
+  background-image: linear-gradient(to top, #f17401, #f8a228);;
   border-radius: 20px;
   border: 0px;
-  padding: 30px;
+  padding: 40px;
   font-size: 23pt;
-  margin-top: 20px;
+  text-align: center;
+  width: 40%;
 }
 
 /* footer */
