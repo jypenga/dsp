@@ -1,0 +1,253 @@
+html, body {
+  min-height: 100%;
+  min-width: 100%;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  font-family: Lato, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+#app-placeholder {
+  display: none;
+}
+
+#app-box {
+  min-height: 100%;
+  min-width: 100%;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+}
+
+/* register header */
+.register-header {
+  min-height: 33%;
+  min-width: 100%;
+  background: radial-gradient(circle 62vh at 50% -35%, #3B72FF 70%, transparent 70%);
+  position: absolute;
+}
+
+.register-header-oval {
+  min-height: 60%;
+  min-width: 100%;
+  background: radial-gradient(circle 16vh at 85% 40%, black 70%, transparent 70%);
+  position: absolute;
+  opacity: .1;
+}
+
+.register-header-text {
+  color: white;
+  top: 22%;
+  left: 7%;
+  position: absolute;
+}
+
+.register-header-text h1 {
+  font-size: 80pt;
+  margin: 5px;
+}
+
+.register-header-text p {
+  font-size: 19pt;
+  text-align: center;
+  margin: 0px;
+}
+
+#register-header-icon {
+  height: 80%;
+  right: 2%;
+  position: absolute;
+}
+
+/* app header */
+.app-header {
+  min-height: 33%;
+  min-width: 100%;
+  background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, transparent 70%);
+  position: absolute;
+}
+
+.app-header-oval {
+  min-height: 60%;
+  min-width: 100%;
+  background: radial-gradient(circle 13vh at 87% 35%, black 70%, transparent 70%);
+  position: absolute;
+  opacity: .1;
+}
+
+.app-header-text-left {
+  color: white;
+  top: 15%;
+  left: 10%;
+  position: absolute;
+}
+
+.app-header-text-left h1 {
+  font-size: 50pt;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.app-header-text-left p {
+  font-size: 25pt;
+  text-align: center;
+  margin: 0px;
+  margin-left: 3px;
+}
+
+.app-header-text-middle {
+  position: absolute;
+  color: white;
+  top: 45%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.app-header-text-middle h1 {
+  font-size: 50pt;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.app-header-text-middle p {
+  font-size: 25pt;
+  text-align: center;
+  margin: 0px;
+  float: left;
+  display: block;
+}
+
+#app-header-icon {
+  height: 22%;
+  top: 14%;
+  right: 6%;
+  position: absolute;
+}
+
+#app-header-menu {
+  height: 10%;
+  top: 5%;
+  right: 4%;
+  position: absolute;
+}
+
+/* body */
+.app-body {
+  top: 35%;
+  position: absolute;
+  color:#2A547E;
+  min-width: inherit;
+  min-height: auto;
+}
+
+.app-body h2 {
+  text-align: center;
+  font-size: 40pt;
+  font-weight: 700;
+}
+
+.app-body p {
+  font-size: 25pt;
+}
+
+.app-body button {
+  position: absolute;
+  font-size: 30pt;
+  font-weight: 300;
+  background-image: linear-gradient(to top, #3B72FF, #3b9aff);
+  color: white;
+  width: 85%;
+  border: none;
+  padding: 4%;
+  border-radius: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.app-body a {
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: orange;
+  font-size: 25pt;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+input[type=checkbox] {
+  zoom: 3;
+  vertical-align: middle;
+  border: gray;
+}
+
+#input-privacy {
+  font-size: 20pt;
+}
+
+#app-free-btn {
+  color: white;
+  background-color: orange;
+  border-radius: 20px;
+  border: 0px;
+  padding: 30px;
+  font-size: 23pt;
+  margin-top: 20px;
+}
+
+/* footer */
+.register-footer {
+  min-height: 8%;
+  min-width: 100%;
+  background-color: #3B72FF;
+  bottom: 0;
+  position: absolute;
+}
+
+#app-register-table {
+  font-size: 32pt;
+  font-weight: 700;
+  color: #171717;
+  margin: 5%;
+}
+
+#app-register-table td {
+  padding: 20px;
+}
+
+#app-register-table input {
+  font-size: inherit;
+  border-radius: 15px;
+  border: none;
+  background-color: #FAFAFA;
+  padding: 10px;
+}
+
+#app-register-table img {
+  width: 50px;
+  height: 50px;
+}
+
+.login-table {
+  font-size: 26pt;
+  font-weight: bolder;
+  color: #979797;
+  margin: 5%;
+  background-color: #F3F3F3;
+  width: 90%;
+  padding: 25px;
+  border-radius: 25px;
+}
+
+.login-table input {
+  background-color: inherit;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+}
