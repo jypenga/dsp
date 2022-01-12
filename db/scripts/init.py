@@ -24,12 +24,13 @@ if __name__ == '__main__':
     db = os.path.join('..', 'main.db')
 
     sql_create_users_table = """CREATE TABLE IF NOT EXISTS users (
-                                id integer PRIMARY KEY,
-                                name text,
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name text NOT NULL,
                                 age integer NOT NULL,
-                                sex text,
-                                email text,
-                                phone text
+                                sex text NOT NULL,
+                                email text NOT NULL,
+                                phone text NOT NULL,
+                                password text NOT NULL
                             ); """
 
     conn = create_connection(db)

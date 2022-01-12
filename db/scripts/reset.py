@@ -24,7 +24,7 @@ def delete_all(conn, delete_all_sql):
 if __name__ == '__main__':
     db = os.path.join('..', 'main.db')
 
-    sql_delete_all = """DELETE FROM users;"""
+    sql_delete_all = """DROP TABLE users;"""
 
     conn = create_connection(db)
 

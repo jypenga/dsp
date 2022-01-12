@@ -12,7 +12,7 @@ LOGIN = [
 cstm.RegisterHeader(),
 html.Div([html.H2('Inloggen'),
         *cstm.LoginTable(),
-        html.Button('INLOGGEN'),
+        html.Button('INLOGGEN', id='login-button'),
         dcc.Link('Wachtwoord vergeten?', href='/patienten')],
 className='app-body'),
 cstm.RegisterFooter()

@@ -20,6 +20,7 @@ def with_connection(db):
         def wrapper(*args, **kwargs):
             conn = create_connection(db)
             response = func(conn, *args, **kwargs)
+            conn.commit()
             conn.close()
             return response
         return wrapper
