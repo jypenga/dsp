@@ -12,6 +12,9 @@ from frames.register import REGISTER
 from frames.login import LOGIN
 from frames.patients import PATIENTS
 
+# import backend funcs
+from backend.register import init_register
+
 # init app
 app = dash.Dash(__name__,
                 external_stylesheets=['https://fonts.googleapis.com/css?family=Lato'])
@@ -45,10 +48,11 @@ def display_page(pathname):
                     State('input-email', 'value'),
                     State('input-phone', 'value')]
 )
-def update_db(n_clicks, username, age, sex, email, tel):
+def cb_init_register(n_clicks, username, age, sex, email, tel):
     # TODO: filter register input before writing to db
     if n_clicks:
-        return [html.P(f'{n_clicks} {username} {age} {sex} {email} {tel}')]
+        val = init_register()
+        return [html.P(f'{val} {n_clicks} {username} {age} {sex} {email} {tel}')]
     else:
         return []
 

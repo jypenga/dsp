@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     sql_create_users_table = """CREATE TABLE IF NOT EXISTS users (
                                 id integer PRIMARY KEY,
+                                name text,
                                 age integer NOT NULL,
                                 sex text,
                                 email text,
