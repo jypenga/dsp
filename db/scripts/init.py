@@ -48,23 +48,23 @@ if __name__ == '__main__':
                                     age integer NOT NULL,
                                     sex text NOT NULL,
                                     height real NOT NULL,
-                                    weight real NOT NULL); """
+                                    weight real NOT NULL,
+                                    score real NOT NULL); """
 
     sql_insert_dummy_users = """INSERT INTO users (name, age, sex, email, phone, password)
                              VALUES
                              ("Admin Admin", 99, "a", "admin@monizorg.nl", "1234", ?),
                              ("Boris Boef", 13, "m", "bboef@duckstad.nl", "1234", ?);"""
 
-    sql_insert_dummy_patients = """INSERT INTO patients (user, name, age, sex, height, weight)
+    sql_insert_dummy_patients = """INSERT INTO patients (user, name, age, sex, height, weight, score)
                                 VALUES
-                                (1, "Harry Houdini", 63, "m", 180, 80.8),
-                                (1, "Ritish Changoer", 1, "m", 160, 200.1),
-                                (1, "Taylor Swift", 40, "v", 180, 55.3),
-                                (1, "Gal Gadot", 42, "v", 180, 60.2),
-                                (2, "Kevin Kevin", 55, "m", 150, 70.8),
-                                (2, "Chris Evans", 1, "m", 180, 90.6),
-                                (2, "Anouk Hooijschuur", 2, "v", 170, 60.4),
-                                (2, "Vera Verbanescu", 42, "v", 176, 70.9);"""
+                                (1, "Harry Houdini", 63, "m", 180, 80.8, 0),
+                                (1, "Ritish Changoer", 1, "m", 160, 200.1, 0),
+                                (1, "Taylor Swift", 40, "v", 180, 55.3, 0),
+                                (2, "Kevin Kevin", 55, "m", 150, 70.8, 0),
+                                (2, "Chris Evans", 1, "m", 180, 90.6, 0),
+                                (2, "Anouk Hooijschuur", 2, "v", 170, 60.4, 0),
+                                (2, "Vera Verbanescu", 42, "v", 176, 70.9, 0);"""
 
     conn = create_connection(db)
 

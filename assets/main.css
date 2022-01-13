@@ -255,3 +255,52 @@ input[type=checkbox] {
   font-family: inherit;
   color: inherit;
 }
+
+#app-patient-table {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 25pt;
+  font-weight: 700;
+  width: 90%;
+}
+
+.app-patient-card {
+  padding: 5%;
+  padding-bottom: 10%;
+  margin: 5%;
+  border-spacing: 25px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+}
+
+#app-patient-table img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  border-radius: 50%;
+  width: 40%;
+}
+
+#app-patient-table button {
+  border: inherit;
+  outline: inherit;
+  position: inherit;
+  color: inherit;
+  background: none;
+  text-decoration: none;
+  font-size: inherit;
+  margin: 0;
+  font-weight: inherit;
+  width: inherit;
+  transform: none;
+}
+
+.patient-card-smiley-score {
+  margin-right: 15px !important;
+  margin-top: 15px !important;
+  width: 15% !important;
+}
