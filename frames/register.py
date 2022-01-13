@@ -13,8 +13,7 @@ cstm.RegisterHeader(),
 html.Div([html.H2('Registreren als Mantelzorger'),
     cstm.RegisterTable(),
     html.Button('REGISTREREN', id='register-button'),
-    dcc.Link('Al geregistreerd?', href='/login')
-    ], 
+    dcc.Link('Al geregistreerd?', href='/login')], 
 className='app-body'),
 cstm.RegisterFooter()
 ]

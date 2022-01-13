@@ -46,7 +46,7 @@ def display_page(pathname):
     elif pathname == '/login':
         return LOGIN
     elif pathname == '/patienten':
-        name = get_name(flask.request.cookies.get('id'))
+        name = get_name(flask.request.cookies.get('user'))
         return PATIENTS(name)
 
 
@@ -79,7 +79,7 @@ def cb_login(n_clicks, email, password):
     if n_clicks:
         id, hashed_pw = login(email, password)
         if bcrypt.checkpw(password.encode(), hashed_pw):
-            dash.callback_context.response.set_cookie('id', str(id))
+            dash.callback_context.response.set_cookie('user', str(id))
             return [dcc.Location(pathname="/patienten", id='_')]
         else:
             return []

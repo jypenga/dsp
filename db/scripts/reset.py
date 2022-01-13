@@ -24,14 +24,16 @@ def delete_all(conn, delete_all_sql):
 if __name__ == '__main__':
     db = os.path.join('..', 'main.db')
 
-    sql_delete_all = """DROP TABLE users;"""
+    sql_delete_users = """DROP TABLE users;"""
+    sql_delete_patients = """DROP TABLE patients;"""
 
     conn = create_connection(db)
 
     perm = input('Do you really wish to reset the database? All data will be lost. [y/n]\n')
     if perm == 'y':
         if conn is not None:
-            delete_all(conn, sql_delete_all)
+            delete_all(conn, sql_delete_users)
+            delete_all(conn, sql_delete_patients)
         else:
             print("Error! cannot create the database connection.")
         print('Database succesfully reset.')
