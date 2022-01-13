@@ -8,12 +8,12 @@ from .connect import with_connection
 PATH = os.path.join('db', 'main.db')
 
 @with_connection(db=PATH)
-def login(conn, email, pw):
-    sql = """SELECT id, password FROM users WHERE email=?;"""
+def get_name(conn, id):
+    sql = """SELECT name FROM users WHERE id=?;"""
     ret = None
     try:
         c = conn.cursor()
-        c.execute(sql, (email, ))
+        c.execute(sql, (id))
         ret = c.fetchall()[0]
     except Error as e:
         print(e)

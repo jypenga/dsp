@@ -8,8 +8,8 @@ from templates.main import Custom
 
 cstm = Custom()
 
-PATIENTS = [
-cstm.AppHeader(),
-html.Div([html.H2('Jouw patienten'),],
-className='app-body'),]
+def PATIENTS(name):
+    return [cstm.AppHeader(top_left_sub=name),
+    html.Div([html.H2('Jouw patienten'),],
+    className='app-body'),]
 # cstm.AppFooter()

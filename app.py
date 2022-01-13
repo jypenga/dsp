@@ -1,6 +1,9 @@
 import dash
+import flask
 import bcrypt
+import pickle
 import sqlite3
+import requests
 
 from dash import dcc
 from dash import html
@@ -16,10 +19,11 @@ from frames.patients import PATIENTS
 # import backend funcs
 from backend.register import init_register
 from backend.login import login
+from backend.get import get_name
 
 # init app
-app = dash.Dash(__name__,
-                external_stylesheets=['https://fonts.googleapis.com/css?family=Lato'])
+app = dash.Dash(__name__, 
+                     external_stylesheets=['https://fonts.googleapis.com/css?family=Lato'])
 
 # suppress callback exceptions
 app.config.suppress_callback_exceptions = True
@@ -42,7 +46,8 @@ def display_page(pathname):
     elif pathname == '/login':
         return LOGIN
     elif pathname == '/patienten':
-        return PATIENTS
+        name = get_name(flask.request.cookies.get('id'))
+        return PATIENTS(name)
 
 
 # initial register
@@ -64,6 +69,7 @@ def cb_init_register(n_clicks, username, age, sex, email, tel):
     else:
         return []
 
+
 # login callback
 @app.callback(Output('app-placeholder-2', 'children'),
               inputs=[Input('login-button', 'n_clicks')],
@@ -71,13 +77,15 @@ def cb_init_register(n_clicks, username, age, sex, email, tel):
                     State('login-input-password', 'value')])
 def cb_login(n_clicks, email, password):
     if n_clicks:
-        val = login(email, password)
-        if bcrypt.checkpw(password.encode(), val):
-            return [html.P(f'jajajaja')]
+        id, hashed_pw = login(email, password)
+        if bcrypt.checkpw(password.encode(), hashed_pw):
+            dash.callback_context.response.set_cookie('id', str(id))
+            return [dcc.Location(pathname="/patienten", id='_')]
         else:
-            return [html.P(f'neeneeneenee')]
+            return []
     else:
         return []
+
 
 # start development server
 if __name__ == '__main__':

@@ -46,7 +46,7 @@ class Custom():
         return content
 
 
-    def AppHeader(self, color=None, middle=None, top_left=None, top_right=None):
+    def AppHeader(self, color=None, middle=None, top_left=None, top_left_sub=None, top_right=None):
         content = html.Div([
                     html.Div([], 
                     className='app-header-oval'), 
@@ -56,7 +56,7 @@ class Custom():
                     id='app-header-menu'),
                     html.Div([
                         html.H1('Patienten'),
-                        html.P('Bas van den Placeholder')], 
+                        html.P(top_left_sub)], 
                         className='app-header-text-left'),
                     html.Div([
                         html.H1('4'),
