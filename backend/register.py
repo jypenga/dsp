@@ -8,7 +8,7 @@ from .connect import with_connection
 PATH = os.path.join('db', 'main.db')
 
 @with_connection(db=PATH)
-def init_register(conn, name, age, sex, email, tel, pw):
+def register(conn, name, age, sex, email, tel, pw):
     sql = """INSERT INTO users (name, age, sex, email, phone, password)
     VALUES(?, ?, ?, ?, ?, ?);"""
     try:

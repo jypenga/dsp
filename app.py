@@ -7,26 +7,35 @@ import sqlite3
 
 from dash import dcc
 from dash import html
-
 from dash.dependencies import Input, Output, State, ALL
+
+from datetime import date
+
+# import templates
+from templates.main import Custom
 
 # import frames
 from frames.start import START
 from frames.register import REGISTER
 from frames.login import LOGIN
+
 from frames.patients import PATIENTS
+from frames.dashboard import DASHBOARD
+
 
 # import backend funcs
-from backend.register import init_register
+from backend.register import register
 from backend.login import login
 from backend.get import *
+
+cstm = Custom()
 
 GC_UID = None
 GC_PID = None
 
 # init app
 app = dash.Dash(__name__, 
-                     external_stylesheets=['https://fonts.googleapis.com/css?family=Lato'])
+                external_stylesheets=['https://fonts.googleapis.com/css?family=Lato'])
 
 # suppress callback exceptions
 app.config.suppress_callback_exceptions = True
@@ -57,24 +66,27 @@ def display_page(pathname):
         patients = get_patients(GC_UID)
         return PATIENTS(name, patients)
     elif pathname == '/dashboard':
-        return []
+        GC_PID = flask.request.cookies.get('pid')
+        patient = get_patient(GC_PID)
+        today = date.today().strftime('%d %b %Y')
+        return DASHBOARD(today, patient)
 
 
 # initial register
 @app.callback(Output('app-placeholder-1', 'children'),
               inputs=[Input('register-button', 'n_clicks')],
               state=[State('input-user', 'value'),
-                    State('input-age', 'value'),
-                    State('input-sex', 'value'),
-                    State('input-email', 'value'),
-                    State('input-phone', 'value')])
-def cb_init_register(n_clicks, username, age, sex, email, tel):
+                     State('input-age', 'value'),
+                     State('input-sex', 'value'),
+                     State('input-email', 'value'),
+                     State('input-phone', 'value')])
+def cb_register(n_clicks, username, age, sex, email, tel):
     # TODO: filter register input before writing to db
     hashable_pw = bytes('abc', encoding='utf-8')
     hashed_pw = bcrypt.hashpw(hashable_pw, bcrypt.gensalt())
 
     if n_clicks:
-        init_register(username, age, sex, email, tel, hashed_pw)
+        register(username, age, sex, email, tel, hashed_pw)
         return [html.P(f'{n_clicks} {username} {age} {sex} {email} {tel}')]
     else:
         return []
@@ -84,7 +96,7 @@ def cb_init_register(n_clicks, username, age, sex, email, tel):
 @app.callback(Output('app-placeholder-2', 'children'),
               inputs=[Input('login-button', 'n_clicks')],
               state=[State('login-input-email', 'value'),
-                    State('login-input-password', 'value')])
+                     State('login-input-password', 'value')])
 def cb_login(n_clicks, email, password):
     if n_clicks:
         id, hashed_pw = login(email, password)
@@ -97,7 +109,7 @@ def cb_login(n_clicks, email, password):
         return []
 
 
-# patients select callback
+# patients wildcard callback
 @app.callback(Output('app-placeholder-3', 'children'),
               Input({'type':'app-patient-card', 'index': ALL}, 'n_clicks'))
 def cb_select_patient(ids):
@@ -108,6 +120,23 @@ def cb_select_patient(ids):
             return [dcc.Location(pathname="/dashboard", id='_')]
     else:
         return []
+
+
+# dashboard switch callback
+@app.callback(Output('dashboard-body', 'children'), 
+              Output('dashboard-button-monitored', 'style'), 
+              Output('dashboard-button-manual', 'style'), 
+              Input('dashboard-button-monitored', 'n_clicks'), 
+              Input('dashboard-button-manual', 'n_clicks'),
+              )
+def cb_switch_dashboard(moitored, manual):
+    trigger = dash.callback_context.triggered[0]['prop_id']
+    if 'monitored' in trigger:
+        return cstm.DashboardListMonitored(), {'border-bottom': '3px solid #3B72FF'}, {}
+    elif 'manual' in trigger:
+        return cstm.DashboardListManual(), {}, {'border-bottom': '3px solid #3B72FF'}
+    else:
+        return cstm.DashboardListMonitored(), {'border-bottom': '3px solid #3B72FF'}, {}
 
 
 # start development server

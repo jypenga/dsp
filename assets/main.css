@@ -128,6 +128,14 @@ a {
   position: absolute;
 }
 
+#app-header-avatar {
+  height: 22%;
+  top: 14%;
+  right: 6%;
+  position: absolute;
+  border-radius: 50%;
+}
+
 #app-header-menu {
   height: 10%;
   top: 5%;
@@ -195,7 +203,7 @@ input[type=checkbox] {
 #app-free-btn {
   color: white;
   text-decoration: none;
-  background-image: linear-gradient(to top, #f17401, #f8a228);;
+  background-image: linear-gradient(to top, #f17401, #f8a228);
   border-radius: 20px;
   border: 0px;
   padding: 40px;
@@ -211,6 +219,56 @@ input[type=checkbox] {
   background-color: #3B72FF;
   bottom: 0;
   position: absolute;
+}
+
+.app-footer {
+  min-height: 6%;
+  min-width: 108%;
+  border-radius: 100px 100px 0 0;
+  background-color: #3B72FF;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+}
+
+.app-footer table {
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  top: -25%;
+}
+
+.app-footer td {
+  width: 17.5%;
+}
+
+.app-footer img {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 40%;
+}
+
+.app-footer #app-footer-dashboard-container {
+  width: 30%;
+}
+
+.app-footer #app-footer-dashboard-container img {
+  padding-top: 35px;
+  width: 50%;
+}
+
+.app-footer #app-footer-dashboard-container #app-footer-dashboard-container-background {
+  background-image: linear-gradient(to top, #f17401, #f8a228);
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
 }
 
 #app-register-table {
@@ -303,4 +361,102 @@ input[type=checkbox] {
   margin-right: 15px !important;
   margin-top: 15px !important;
   width: 15% !important;
+}
+
+.dashboard-table {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 25pt;
+  font-weight: 700;
+  width: 90%;
+}
+
+.dashboard-table td {
+  width: 12.5%;
+}
+
+.dashboard-table .dashboard-card-icon {
+  min-width: 170px;
+}
+
+.dashboard-table .dashboard-card-text {
+  width: 40%;
+}
+
+.dashboard-table tr {
+  display: block;
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+  padding-top: 4%;
+  padding-bottom: 4%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.dashboard-table p {
+  color: gray;
+  font-weight: normal;
+  margin: 0px;
+  margin-left: 13px;
+}
+
+.dashboard-table h2 {
+  margin: 10px;
+  font-size: 35pt;
+  font-weight: bolder;
+  text-align: left;
+}
+
+.dashboard-table .dashboard-icon {
+  display: block;
+  margin-left: 15%;
+  margin-right: auto;
+  width: 100px;
+}
+
+.dashboard-table .dashboard-card-smiley-score {
+  width: 45%;
+  float: right;
+}
+
+.dashboard-table .dashboard-card-expand {
+  width: 15%;
+  float: right;
+  margin-right: 25%;
+}
+
+.dashboard-subheader {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 16%;
+  bottom: 0px;
+}
+
+.dashboard-subheader button {
+  border: inherit;
+  color: inherit;
+  background: none;
+  text-decoration: none;
+  font-size: inherit;
+  margin: 0;
+  font-weight: inherit;
+  transform: none;
+}
+
+h3 {
+  color: gray;
+  font-size: 25pt;
+}
+
+.dashboard-subheader #dashboard-button-monitored {
+  position: absolute;
+  left: 0px;
+}
+
+.dashboard-subheader #dashboard-button-manual {
+  position: absolute;
+  right: 0px;
 }

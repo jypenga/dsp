@@ -32,3 +32,17 @@ def get_patients(conn, id):
     except Error as e:
         print(e)
     return ret
+
+@with_connection(db=PATH)
+def get_patient(conn, id):
+    sql = """SELECT * FROM patients WHERE id=?;"""
+    ret = []
+    if not id:
+        return ret
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id))
+        ret = c.fetchall()[0]
+    except Error as e:
+        print(e)
+    return ret

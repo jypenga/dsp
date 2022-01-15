@@ -46,30 +46,37 @@ class Custom():
         return content
 
 
-    def AppHeader(self, color=None, middle=None, top_left=None, top_left_sub=None, top_right=None):
+    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False):
         content = html.Div([
                     html.Div([], 
                     className='app-header-oval'), 
-                    html.Img(src=self.app.get_asset_url('header-icon-patients.svg'), 
-                    id='app-header-icon'),
+                    html.Img(src=self.app.get_asset_url(top_right), 
+                    id=top_right_id),
                     html.Img(src=self.app.get_asset_url('header-icon-menu.svg'), 
                     id='app-header-menu'),
                     html.Div([
-                        html.H1('Patienten'),
+                        html.H1(top_left),
                         html.P(top_left_sub)], 
                         className='app-header-text-left'),
                     html.Div([
                         html.H1(middle),
-                        html.P('Patienten')], 
-                        className='app-header-text-middle')
-                ], className='app-header')
+                        html.P(middle_sub)], 
+                        className='app-header-text-middle'),
+                    html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader') if dashboard else None,
+                ], className='app-header', style={'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'} if dashboard else {})
         return content
 
 
     def AppFooter(self, color=None, buttons=True):
         if not buttons:
             return self.RegisterFooter()
-        content = None
+
+        content = html.Div(html.Table(html.Tbody(html.Tr([html.Td(html.Img(src=self.app.get_asset_url('footer-icon-calendar.svg'))), 
+                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-checklist.svg'))), 
+                                                          html.Td(html.Div(html.Img(src=self.app.get_asset_url('footer-icon-dashboard.svg')), id='app-footer-dashboard-container-background'), id='app-footer-dashboard-container'), 
+                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-notifications.svg'))), 
+                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-profile.svg')))]))), 
+                    className='app-footer')
         return content
 
     
@@ -94,4 +101,28 @@ class Custom():
         content = html.Table(html.Tbody([*[html.Tr([PatientCard(duo[0]), PatientCard(duo[1])]) for duo in patients], 
                                            html.Tr(PatientCard(tmp) if tmp else [])]), 
                                             id='app-patient-table')
+        return content
+
+
+    def DashboardListMonitored(self):
+        tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore']
+        icons = ['heartbeat', 'saturation', 'temperature', 'sleep']
+        colors = ['#fff0f4', '#e6eaff', '#ecfaff', '#fffaed']
+        content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
+                                                  html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
+                                                  html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
+                                                  html.Td(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}) for i in range(len(tables))]),
+                                                  className='dashboard-table')
+        return content
+
+
+    def DashboardListManual(self):
+        tables = ['bloeddruk', 'glucose', 'medicatie', 'voeding']
+        icons = ['blood-pressure', 'glucose', 'medication', 'food']
+        colors = ['#ffecec', 'white', '#ecf9f1', '#f6fef9']
+        content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
+                                                  html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
+                                                  html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
+                                                  html.Td(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}) for i in range(len(tables))]),
+                                                  className='dashboard-table')
         return content
