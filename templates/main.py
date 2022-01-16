@@ -113,7 +113,7 @@ class Custom():
 
 
     def DashboardListMonitored(self):
-        tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore', 'activiteit']
+        tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore', 'beweging']
         icons = ['heartbeat', 'saturation', 'temperature', 'sleep', 'activity']
         colors = ['#fff0f4', '#e6eaff', '#ecfaff', '#fffaed', '#e6f5da']
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 

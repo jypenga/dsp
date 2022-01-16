@@ -44,48 +44,52 @@ app = dash.Dash(__name__,
 app.config.suppress_callback_exceptions = True
 
 # layout
-app.layout = html.Div([dcc.Location(id='url', refresh=False), 
-html.Div([], id='app-placeholder-1', className='app-placeholder'),
-html.Div([], id='app-placeholder-2', className='app-placeholder'),
-html.Div([], id='app-placeholder-3', className='app-placeholder'),
-html.Div([], id='app-box')])
+app.layout = html.Div([dcc.Location(id='url-1', refresh=False),
+                       dcc.Location(id='url-2', refresh=False),
+                       html.Div([], id='app-placeholder-1', className='app-placeholder'),
+                       html.Div([], id='app-placeholder-2', className='app-placeholder'),
+                       html.Div([], id='app-placeholder-3', className='app-placeholder'),
+                       html.Div([], id='app-box')])
 
 
 # content switch
 @app.callback(Output('app-box', 'children'),
-              [Input('url', 'pathname')]
-)
-def display_page(pathname):
+              Input('url-1', 'pathname'),
+              Input('url-2', 'pathname'))
+def display_page(path_1, path_2):
     uid = flask.request.cookies.get('uid')
     pid = flask.request.cookies.get('pid')
     today = date.today().strftime('%d %b %Y')
 
-    if pathname == '/':
+    def check_path(pathname):
+        return path_1 == pathname or path_2 == pathname
+
+    if check_path('/'):
         return START
-    elif pathname == '/registreren':
+    elif check_path('/registreren'):
         return REGISTER
-    elif pathname == '/login':
+    elif check_path('/login'):
         return LOGIN
-    elif pathname == '/patienten' and uid:
+    elif check_path('/patienten') and uid:
         name = get_name(uid)
         patients = get_patients(uid)
         return PATIENTS(name, patients)
-    elif pathname == '/dashboard' and uid and pid:
+    elif check_path('/dashboard') and uid and pid:
         patient = get_patient(pid)
         return DASHBOARD(today, patient)
-    elif pathname == '/agenda' and uid and pid:
+    elif check_path('/agenda') and uid and pid:
         patient = get_patient(pid)
         return CALENDAR(today, patient)
-    elif pathname == '/checklist' and uid and pid:
+    elif check_path('/checklist') and uid and pid:
         patient = get_patient(pid)
         return CHECKLIST(today, patient)
-    elif pathname == '/notificaties' and uid and pid:
+    elif check_path('/notificaties') and uid and pid:
         return []
-    elif pathname == '/profiel' and uid and pid:
+    elif check_path('/profiel') and uid and pid:
         patient = get_patient(pid)
         return PROFILE(patient)
     else:
-        return dcc.Location(pathname='/login', id='_')
+        return LOGIN
 
 
 # initial register
@@ -114,6 +118,7 @@ def cb_register(n_clicks, username, age, sex, email, tel):
               state=[State('login-input-email', 'value'),
                      State('login-input-password', 'value')])
 def cb_login(n_clicks, email, password):
+    # TODO: display message when login unsuccesful
     if n_clicks:
         id, hashed_pw = login(email, password)
         if bcrypt.checkpw(password.encode(), hashed_pw):
@@ -128,37 +133,41 @@ def cb_login(n_clicks, email, password):
 # header menu callback
 @app.callback(Output('app-header-button-menu', 'children'),
               Output('app-header-menu-container', 'style'),
-              Input('app-header-button-menu', 'n_clicks'),
-              Input('app-header-button-patient', 'n_clicks'),
-              Input('app-header-button-logout', 'n_clicks'))
-def cb_header_menu(n_clicks_menu, b, c):
-    trigger = dash.callback_context.triggered[0]['prop_id']
-    if 'menu' in trigger:
-        if (n_clicks_menu % 2 != 0):
-            return html.Img(src=app.get_asset_url('header-icon-menu-dark.svg')), {'display':'block'}
-        else:
-            return html.Img(src=app.get_asset_url('header-icon-menu.svg')), {'display':'none'}
-    elif 'patient' in trigger:
-        return dcc.Location(pathname='/patienten', id='_'), {'display':'none'}
-    elif 'logout' in trigger:
-        dash.callback_context.response.set_cookie('uid', '', expires=0)
-        dash.callback_context.response.set_cookie('pid', '', expires=0)
-        return dcc.Location(pathname='/login', id='_'), {}
+              Input('app-header-button-menu', 'n_clicks'))
+def cb_header_menu(n_clicks_menu):
+    if n_clicks_menu and (n_clicks_menu % 2 != 0):
+        return html.Img(src=app.get_asset_url('header-icon-menu-dark.svg')), {'display':'block'}
     else:
         return html.Img(src=app.get_asset_url('header-icon-menu.svg')), {'display':'none'}
 
 
+# header menu options callback
+@app.callback(Output('url-2', 'pathname'),
+              Input('app-header-button-patient', 'n_clicks'),
+              Input('app-header-button-logout', 'n_clicks'),
+              Input('url-1', 'pathname'))
+def cb_header_menu_options(n_clicks_patient, n_clicks_logout, url):
+    if n_clicks_patient:
+        return '/patienten'
+    elif n_clicks_logout:
+        dash.callback_context.response.set_cookie('uid', '', expires=0)
+        dash.callback_context.response.set_cookie('pid', '', expires=0)
+        return '/login'
+    else:
+        return url
+
+
 # patients wildcard callback
-@app.callback(Output('app-placeholder-3', 'children'),
+@app.callback(Output('url-1', 'pathname'),
               Input({'type':'app-patient-card', 'index': ALL}, 'n_clicks'))
 def cb_select_patient(ids):
     if len(dash.callback_context.triggered) == 1:
         pid = yaml.safe_load(dash.callback_context.triggered[0]['prop_id'].split('.')[0])
         if pid:
             dash.callback_context.response.set_cookie('pid', str(pid['index']))
-            return [dcc.Location(pathname='/dashboard', id='_')]
+            return '/dashboard'
     else:
-        return []
+        return '/patienten'
 
 
 # dashboard switch callback
@@ -166,8 +175,7 @@ def cb_select_patient(ids):
               Output('dashboard-button-monitored', 'style'), 
               Output('dashboard-button-manual', 'style'), 
               Input('dashboard-button-monitored', 'n_clicks'), 
-              Input('dashboard-button-manual', 'n_clicks'),
-              )
+              Input('dashboard-button-manual', 'n_clicks'))
 def cb_switch_dashboard(moitored, manual):
     trigger = dash.callback_context.triggered[0]['prop_id']
     if 'monitored' in trigger:
@@ -185,9 +193,8 @@ def cb_switch_dashboard(moitored, manual):
               Output('profile-button-food', 'style'), 
               Input('profile-button-info', 'n_clicks'), 
               Input('profile-button-medical', 'n_clicks'),
-              Input('profile-button-food', 'n_clicks'),
-              )
-def cb_switch_dashboard(info, medical, food):
+              Input('profile-button-food', 'n_clicks'))
+def cb_switch_profile(info, medical, food):
     trigger = dash.callback_context.triggered[0]['prop_id']
     GC_PID = flask.request.cookies.get('pid')
     patient = get_patient(GC_PID)
