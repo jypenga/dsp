@@ -13,7 +13,8 @@ cstm.RegisterHeader(),
 html.Div([html.H2('Inloggen'),
         *cstm.LoginTable(),
         html.Button('INLOGGEN', id='login-button'),
-        dcc.Link('Wachtwoord vergeten?', href='/patienten')],
+        dcc.Link('Wachtwoord vergeten?', href='/patienten', id='free-link-1'),
+        dcc.Link('Nog geen account?', href='/registreren', id='free-link-2')],
 className='app-body'),
 cstm.RegisterFooter()
 ]

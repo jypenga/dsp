@@ -46,7 +46,17 @@ class Custom():
         return content
 
 
-    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False):
+    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False):
+        if dashboard:
+            subheader = html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader')
+            shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
+        elif profile:
+            subheader = html.Div([html.Button(html.H3('INFO'), id='profile-button-info', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('MEDISCH'), id='profile-button-medical'), html.Button(html.H3('VOEDING'), id='profile-button-food')], className='dashboard-subheader')
+            shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
+        else:
+            subheader = None
+            shadow = {}
+
         content = html.Div([
                     html.Div([], 
                     className='app-header-oval'), 
@@ -62,8 +72,8 @@ class Custom():
                         html.H1(middle),
                         html.P(middle_sub)], 
                         className='app-header-text-middle'),
-                    html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader') if dashboard else None,
-                ], className='app-header', style={'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'} if dashboard else {})
+                    subheader,
+                ], className='app-header', style=shadow)
         return content
 
 
@@ -71,11 +81,11 @@ class Custom():
         if not buttons:
             return self.RegisterFooter()
 
-        content = html.Div(html.Table(html.Tbody(html.Tr([html.Td(html.Img(src=self.app.get_asset_url('footer-icon-calendar.svg'))), 
-                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-checklist.svg'))), 
-                                                          html.Td(html.Div(html.Img(src=self.app.get_asset_url('footer-icon-dashboard.svg')), id='app-footer-dashboard-container-background'), id='app-footer-dashboard-container'), 
+        content = html.Div(html.Table(html.Tbody(html.Tr([html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-calendar.svg')), href='/agenda')), 
+                                                          html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-checklist.svg')), href='/checklist')), 
+                                                          html.Td(dcc.Link(html.Div(html.Img(src=self.app.get_asset_url('footer-icon-dashboard.svg')), id='app-footer-dashboard-container-background'), href='/dashboard'), id='app-footer-dashboard-container'), 
                                                           html.Td(html.Img(src=self.app.get_asset_url('footer-icon-notifications.svg'))), 
-                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-profile.svg')))]))), 
+                                                          html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-profile.svg')), href='/profiel'))]))), 
                     className='app-footer')
         return content
 
@@ -105,9 +115,9 @@ class Custom():
 
 
     def DashboardListMonitored(self):
-        tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore']
-        icons = ['heartbeat', 'saturation', 'temperature', 'sleep']
-        colors = ['#fff0f4', '#e6eaff', '#ecfaff', '#fffaed']
+        tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore', 'activiteit']
+        icons = ['heartbeat', 'saturation', 'temperature', 'sleep', 'activity']
+        colors = ['#fff0f4', '#e6eaff', '#ecfaff', '#fffaed', '#e6f5da']
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
                                                   html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
@@ -126,3 +136,34 @@ class Custom():
                                                   html.Td(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}) for i in range(len(tables))]),
                                                   className='dashboard-table')
         return content
+
+
+    def ProfileTableInfo(self, patient):
+        content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-user.svg'))), html.Td('Naam'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
+                html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-age.svg'))), html.Td('Leeftijd'), html.Td(dcc.Input(id='input-age', type='number', value=patient[3]))]),
+                html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-sex.svg'))), html.Td('Geslacht'), html.Td(dcc.Dropdown(id='input-sex', options=[{'label':'man', 'value':'m'}, {'label':'vrouw', 'value':'v'}, {'label':'anders', 'value':'a'}], placeholder='', clearable=False, value=patient[4]))]),
+                html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-height.svg'))), html.Td('Lengte'), html.Td(dcc.Input(id='input-email', type='text', value=f'{patient[5]} m'))]),
+                html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-weight.svg'))), html.Td('Gewicht'), html.Td(dcc.Input(id='input-phone', type='text', value=f'{patient[6]} kg'))]),
+                ]), id='app-register-table')
+        return content
+
+
+    def ProfileTableMedical(self, patient):
+        content = [html.H3('MEDISCHE INFORMATIE'),
+                html.Table(html.Tbody([html.Tr([html.Td('Huisarts'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
+                html.Tr([html.Td('Tel. huisarts'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]))]),
+                html.Tr([html.Td('Zorgverzekering'), html.Td(dcc.Input(id='input-sex', type='text', value=patient[4]))]),
+                html.Tr([html.Td('Achtergrond'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'))]),
+                ]), id='app-register-table'),
+                html.H3('MEDICATIE'),
+                html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
+                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]))]),
+                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Input(id='input-sex', type='text', value=patient[4]))]),
+                html.Tr([html.Td('Maaltijd'), html.Td(dcc.Input(id='input-email', type='text', value=f'{patient[5]} m'))]),
+                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'))]),
+                ]), id='app-register-table')]
+        return content
+
+
+    def ProfileTableFood(self):
+        return []

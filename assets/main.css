@@ -68,8 +68,9 @@ a {
 .app-header {
   min-height: 33%;
   min-width: 100%;
-  background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, transparent 70%);
-  position: absolute;
+  background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, white 70%);
+  position: fixed;
+  z-index: 10;
 }
 
 .app-header-oval {
@@ -181,13 +182,24 @@ a {
 
 .app-body a {
   position: absolute;
-  top: 130%;
   left: 50%;
   transform: translateX(-50%);
   color: orange;
   font-size: 25pt;
   font-weight: 700;
   text-decoration: underline;
+}
+
+.app-body #free-link-1 {
+  top: 130%;
+}
+
+.app-body #free-link-2 {
+  top: 145%;
+}
+
+.app-body #free-link-3 {
+  top: 120%;
 }
 
 input[type=checkbox] {
@@ -288,6 +300,17 @@ input[type=checkbox] {
   border: none;
   background-color: #FAFAFA;
   padding: 10px;
+}
+
+#app-register-table textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 15px;
+  border: none;
+  background-color: #FAFAFA;
+  padding: 10px;
+  width: 95%;
+  height: 10vh;
 }
 
 #app-register-table img {
@@ -454,9 +477,27 @@ h3 {
 .dashboard-subheader #dashboard-button-monitored {
   position: absolute;
   left: 0px;
+  width: 40%;
 }
 
 .dashboard-subheader #dashboard-button-manual {
   position: absolute;
   right: 0px;
+  width: 40%;
+}
+
+.dashboard-subheader #profile-button-info {
+  width: 33%;
+}
+
+.dashboard-subheader #profile-button-medical {
+  width: 33%;
+}
+
+.dashboard-subheader #profile-button-food {
+  width: 33%;
+}
+
+#profile-body h3 {
+  text-align: center;
 }

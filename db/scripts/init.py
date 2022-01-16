@@ -59,13 +59,13 @@ if __name__ == '__main__':
 
     sql_insert_dummy_patients = """INSERT INTO patients (user, name, age, sex, height, weight, score)
                                 VALUES
-                                (1, "Harry Houdini", 63, "m", 180, 80.8, "avatar-m.png", 0),
-                                (1, "Ritish Changoer", 1, "m", 160, 200.1, "avatar-m.png", 0),
-                                (1, "Taylor Swift", 40, "v", 180, 55.3, "avatar-f.png", 0),
-                                (2, "Kevin Kevin", 55, "m", 150, 70.8, "avatar-f.png", 0),
-                                (2, "Chris Evans", 1, "m", 180, 90.6, "avatar-m.png", 0),
-                                (2, "Anouk Hooijschuur", 2, "v", 170, "avatar-f.png", 60.4, 0),
-                                (2, "Vera Verbanescu", 42, "v", 176, "avatar-f.png", 70.9, 0);"""
+                                (1, "Harry Houdini", 63, "m", 1.80, 80.8, "avatar-m.png", 0),
+                                (1, "Ritish Changoer", 1, "m", 1.60, 200.1, "avatar-m.png", 0),
+                                (1, "Taylor Swift", 40, "v", 1.80, 55.3, "avatar-f.png", 0),
+                                (2, "Kevin Kevin", 55, "m", 1.50, 70.8, "avatar-f.png", 0),
+                                (2, "Chris Evans", 1, "m", 1.80, 90.6, "avatar-m.png", 0),
+                                (2, "Anouk Hooijschuur", 2, "v", 1.70, "avatar-f.png", 60.4, 0),
+                                (2, "Vera Verbanescu", 42, "v", 1.76, "avatar-f.png", 70.9, 0);"""
 
     conn = create_connection(db)
 
