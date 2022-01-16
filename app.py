@@ -85,7 +85,7 @@ def display_page(pathname):
         patient = get_patient(pid)
         return PROFILE(patient)
     else:
-        return dcc.Location(pathname="/login", id='_')
+        return dcc.Location(pathname='/login', id='_')
 
 
 # initial register
@@ -118,11 +118,34 @@ def cb_login(n_clicks, email, password):
         id, hashed_pw = login(email, password)
         if bcrypt.checkpw(password.encode(), hashed_pw):
             dash.callback_context.response.set_cookie('uid', str(id))
-            return [dcc.Location(pathname="/patienten", id='_')]
+            return [dcc.Location(pathname='/patienten', id='_')]
         else:
             return []
     else:
         return []
+
+
+# header menu callback
+@app.callback(Output('app-header-button-menu', 'children'),
+              Output('app-header-menu-container', 'style'),
+              Input('app-header-button-menu', 'n_clicks'),
+              Input('app-header-button-patient', 'n_clicks'),
+              Input('app-header-button-logout', 'n_clicks'))
+def cb_header_menu(n_clicks_menu, b, c):
+    trigger = dash.callback_context.triggered[0]['prop_id']
+    if 'menu' in trigger:
+        if (n_clicks_menu % 2 != 0):
+            return html.Img(src=app.get_asset_url('header-icon-menu-dark.svg')), {'display':'block'}
+        else:
+            return html.Img(src=app.get_asset_url('header-icon-menu.svg')), {'display':'none'}
+    elif 'patient' in trigger:
+        return dcc.Location(pathname='/patienten', id='_'), {'display':'none'}
+    elif 'logout' in trigger:
+        dash.callback_context.response.set_cookie('uid', '', expires=0)
+        dash.callback_context.response.set_cookie('pid', '', expires=0)
+        return dcc.Location(pathname='/login', id='_'), {}
+    else:
+        return html.Img(src=app.get_asset_url('header-icon-menu.svg')), {'display':'none'}
 
 
 # patients wildcard callback
@@ -133,7 +156,7 @@ def cb_select_patient(ids):
         pid = yaml.safe_load(dash.callback_context.triggered[0]['prop_id'].split('.')[0])
         if pid:
             dash.callback_context.response.set_cookie('pid', str(pid['index']))
-            return [dcc.Location(pathname="/dashboard", id='_')]
+            return [dcc.Location(pathname='/dashboard', id='_')]
     else:
         return []
 

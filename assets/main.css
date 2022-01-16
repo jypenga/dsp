@@ -137,11 +137,60 @@ a {
   border-radius: 50%;
 }
 
-#app-header-menu {
-  height: 10%;
+#app-header-menu-container button {
+  border: inherit;
+  outline: inherit;
+  color: inherit;
+  background: none;
+  text-decoration: none;
+  font-size: 25pt;
+  font-weight: 700;
+  transform: none;
+  padding: 0;
+  font-family: inherit;
+}
+
+#app-header-button-menu {
+  height: 11%;
   top: 5%;
-  right: 4%;
+  right: 3%;
   position: absolute;
+  border: inherit;
+  outline: inherit;
+  color: inherit;
+  background: none;
+  text-decoration: none;
+  font-size: inherit;
+  margin: 0;
+  font-weight: inherit;
+  width: inherit;
+  transform: none;
+  z-index: 13;
+}
+
+#app-header-button-menu img {
+  height: 100%;
+}
+
+#app-header-menu-container {
+  position: absolute;
+  background: white;
+  width: 40%;
+  right: 2%;
+  top: 3%;
+  font-size: 25pt;
+  font-weight: 700;
+  color: #486581;
+  border-radius: 15px;
+  z-index: 11;
+}
+
+#app-header-menu-container ul {
+  list-style: none;
+}
+
+#app-header-menu-container li {
+  margin: 20px;
 }
 
 /* body */
@@ -205,7 +254,7 @@ a {
 input[type=checkbox] {
   zoom: 3;
   vertical-align: middle;
-  border: gray;
+  border: #486581;
 }
 
 #input-privacy {
@@ -418,7 +467,7 @@ input[type=checkbox] {
 }
 
 .dashboard-table p {
-  color: gray;
+  color: #486581;
   font-weight: normal;
   margin: 0px;
   margin-left: 13px;
@@ -470,7 +519,7 @@ input[type=checkbox] {
 }
 
 h3 {
-  color: gray;
+  color: #486581;
   font-size: 25pt;
 }
 
