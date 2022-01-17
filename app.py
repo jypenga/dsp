@@ -45,8 +45,7 @@ app.config.suppress_callback_exceptions = True
 
 # layout
 app.layout = html.Div([dcc.Location(id='url-1', refresh=False),
-                       dcc.Location(id='url-2', refresh=False),
-                       html.Div([], id='app-placeholder-1', className='app-placeholder'),
+                       html.Div([], id='app-notification-placeholder-1', className='app-placeholder'),
                        html.Div([], id='app-placeholder-2', className='app-placeholder'),
                        html.Div([], id='app-placeholder-3', className='app-placeholder'),
                        html.Div([], id='app-box')])
@@ -54,15 +53,14 @@ app.layout = html.Div([dcc.Location(id='url-1', refresh=False),
 
 # content switch
 @app.callback(Output('app-box', 'children'),
-              Input('url-1', 'pathname'),
-              Input('url-2', 'pathname'))
-def display_page(path_1, path_2):
+              Input('url-1', 'pathname'))
+def display_page(path_1):
     uid = flask.request.cookies.get('uid')
     pid = flask.request.cookies.get('pid')
     today = date.today().strftime('%d %b %Y')
 
     def check_path(pathname):
-        return path_1 == pathname or path_2 == pathname
+        return path_1 == pathname
 
     if check_path('/'):
         return START
@@ -98,8 +96,19 @@ def display_page(path_1, path_2):
         return LOGIN
 
 
+# notifications wildcard callback
+@app.callback(Output({'type':'notification', 'index': ALL}, 'style'),
+              Input({'type':'close-notification-button', 'index': ALL}, 'n_clicks'))
+def cb_select_patient(n_clicks):
+    if n_clicks[0]:
+        return [{'display':'none'}]
+    else:
+        return [{}]
+
+
 # initial register
-@app.callback(Output('app-placeholder-1', 'children'),
+@app.callback(Output('app-notification-placeholder-1', 'children'),
+              Output('app-notification-placeholder-1', 'style'),
               inputs=[Input('register-button', 'n_clicks')],
               state=[State('input-user', 'value'),
                      State('input-age', 'value'),
@@ -113,10 +122,9 @@ def cb_register(n_clicks, username, age, sex, email, tel):
 
     if n_clicks:
         register(username, age, sex, email, tel, hashed_pw)
-        # TODO: registration succesful notification
-        return []
+        return cstm.Notification('Registratie succesvol!', index=1), {'display':'block', '-webkit-animation':'fadein 1s linear forwards', 'animation':'fadein 1s linear forwards'}
     else:
-        return []
+        return [], {'display':'none'}
 
 
 # login callback
@@ -127,12 +135,14 @@ def cb_register(n_clicks, username, age, sex, email, tel):
 def cb_login(n_clicks, email, password):
     # TODO: display message when login unsuccesful
     if n_clicks:
-        id, hashed_pw = login(email, password)
+        if not email or not password:
+            return [dcc.Location(pathname='/login', id='_')]
+        id, hashed_pw = login(email, password) 
         if bcrypt.checkpw(password.encode(), hashed_pw):
             dash.callback_context.response.set_cookie('uid', str(id))
             return [dcc.Location(pathname='/patienten', id='_')]
         else:
-            return []
+            return [dcc.Location(pathname='/login', id='_')]
     else:
         return []
 

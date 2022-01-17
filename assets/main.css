@@ -14,6 +14,64 @@ a {
 
 .app-placeholder {
   display: none;
+  position: relative;
+  background: transparent;
+  z-index: 15;
+}
+
+.notification {
+  position: absolute;
+  left: 50%;
+  margin-top: 5%;
+  transform: translateX(-50%);
+  display: inline-block;
+  background: #FAFAFA;
+  color: #171717;
+  font-size: 25pt;
+  font-weight: 700;
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+  padding: .5%;
+  min-width: 60%;
+}
+
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.notification table {
+  width: 90%;
+}
+
+.notification img {
+  width: 40px;
+  padding-left: 30px;
+}
+
+.notification td {
+  border: 5px transparent;
+}
+
+.notification button {
+  border: inherit;
+  outline: inherit;
+  color: gray;
+  background: none;
+  text-decoration: none;
+  font-size: 25pt;
+  font-weight: normal;
+  transform: none;
+  padding: 0;
+  font-family: inherit;
+  position: absolute;
+  right: 20px;
+  top: 5px;
 }
 
 #app-box {
@@ -22,6 +80,7 @@ a {
   min-width: 100%;
   margin: 0px;
   padding: 0px;
+  top: 0;
 }
 
 /* register header */
@@ -461,7 +520,7 @@ input[type=checkbox] {
 .dashboard-table tr {
   display: block;
   border-radius: 25px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+  
   padding-top: 4%;
   padding-bottom: 4%;
   margin-top: 5%;
@@ -553,12 +612,13 @@ h3 {
   text-align: center;
 }
 
+/* loading animation, probably needs changing */
 ._dash-loading {
-  margin: auto;
   color: transparent;
   width: 0;
   height: 0;
-  text-align: center;
+  margin-top: 100%;
+  margin-left: 45%;
 }
 
 ._dash-loading::after {
@@ -567,11 +627,9 @@ h3 {
   width: 5rem;
   height: 5rem;
   color: black;
-  vertical-align: text-bottom;
   border: 0.25em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   -webkit-animation: spinner-border 0.75s linear infinite;
   animation: spinner-border 0.75s linear infinite;
-  margin-top: 2rem;
 }

@@ -88,6 +88,12 @@ class Custom():
         return content
 
     
+    def Notification(self, contents, index=0):
+        content = html.Div([html.Table(html.Tbody(html.Tr([html.Td(html.Img(src=self.app.get_asset_url('notification-icon-success.svg'))), html.Td(html.P(contents))]))), 
+        html.Button('x', id={'type':'close-notification-button', 'index':str(index)})], id={'type':'notification', 'index':str(index)}, className='notification') 
+        return content
+
+    
     def PatientTable(self, patients):
         # group by 2
         tmp = None

@@ -50,7 +50,13 @@ if __name__ == '__main__':
                                     height real NOT NULL,
                                     weight real NOT NULL,
                                     avatar text NOT NULL,
-                                    score real NOT NULL); """
+                                    score real NOT NULL
+                                    doctor text,
+                                    doctor_phone text,
+                                    provider text,
+                                    background text); """
+
+    sql_create_medication_table = """"""
 
     sql_insert_dummy_users = """INSERT INTO users (name, age, sex, email, phone, password)
                              VALUES
