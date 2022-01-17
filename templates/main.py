@@ -61,7 +61,7 @@ class Custom():
                     html.Div([], className='app-header-oval'), 
                     html.Img(src=self.app.get_asset_url(top_right), id=top_right_id),
                     html.Button(html.Img(src=self.app.get_asset_url('header-icon-menu.svg')), id='app-header-button-menu'),
-                    html.Div(html.Ul([html.Li(html.Button('Wissel patient', id='app-header-button-patient')), html.Li('Instellingen'), html.Li(html.Button('Log uit', id='app-header-button-logout'))]), id='app-header-menu-container', style={'display':'none'}),
+                    html.Div(html.Ul([html.Li(dcc.Link('Wissel patient', href='/patienten')), html.Li('Instellingen'), html.Li(html.Button('Log uit', id='app-header-button-logout'))]), id='app-header-menu-container', style={'display':'none'}),
                     html.Div([
                         html.H1(top_left),
                         html.P(top_left_sub)], 

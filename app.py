@@ -88,6 +88,12 @@ def display_page(path_1, path_2):
     elif check_path('/profiel') and uid and pid:
         patient = get_patient(pid)
         return PROFILE(patient)
+    # if first time login, but no patient selected, redirect to patients
+    elif not pid:
+        name = get_name(uid)
+        patients = get_patients(uid)
+        return PATIENTS(name, patients)
+    # if not logged in, redirect to login
     else:
         return LOGIN
 
@@ -107,7 +113,8 @@ def cb_register(n_clicks, username, age, sex, email, tel):
 
     if n_clicks:
         register(username, age, sex, email, tel, hashed_pw)
-        return [html.P(f'{n_clicks} {username} {age} {sex} {email} {tel}')]
+        # TODO: registration succesful notification
+        return []
     else:
         return []
 
@@ -133,28 +140,20 @@ def cb_login(n_clicks, email, password):
 # header menu callback
 @app.callback(Output('app-header-button-menu', 'children'),
               Output('app-header-menu-container', 'style'),
-              Input('app-header-button-menu', 'n_clicks'))
-def cb_header_menu(n_clicks_menu):
-    if n_clicks_menu and (n_clicks_menu % 2 != 0):
-        return html.Img(src=app.get_asset_url('header-icon-menu-dark.svg')), {'display':'block'}
+              Input('app-header-button-menu', 'n_clicks'),
+              Input('app-header-button-logout', 'n_clicks'))
+def cb_header_menu(n_clicks_menu, n_clicks_logout):
+    trigger = dash.callback_context.triggered[0]['prop_id']
+    if 'menu' in trigger:
+        if n_clicks_menu and (n_clicks_menu % 2 != 0):
+            return html.Img(src=app.get_asset_url('header-icon-menu-dark.svg')), {'display':'block'}
+    if 'logout' in trigger:
+        if n_clicks_logout:
+            dash.callback_context.response.set_cookie('uid', '', expires=0)
+            dash.callback_context.response.set_cookie('pid', '', expires=0)
+            return [dcc.Location(pathname='/login', id='_')], {}
     else:
         return html.Img(src=app.get_asset_url('header-icon-menu.svg')), {'display':'none'}
-
-
-# header menu options callback
-@app.callback(Output('url-2', 'pathname'),
-              Input('app-header-button-patient', 'n_clicks'),
-              Input('app-header-button-logout', 'n_clicks'),
-              Input('url-1', 'pathname'))
-def cb_header_menu_options(n_clicks_patient, n_clicks_logout, url):
-    if n_clicks_patient:
-        return '/patienten'
-    elif n_clicks_logout:
-        dash.callback_context.response.set_cookie('uid', '', expires=0)
-        dash.callback_context.response.set_cookie('pid', '', expires=0)
-        return '/login'
-    else:
-        return url
 
 
 # patients wildcard callback
