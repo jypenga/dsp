@@ -33,6 +33,8 @@ a {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
   padding: .5%;
   min-width: 60%;
+  -webkit-animation: fadein 1s linear forwards;
+  animation: fadein 1s linear forwards;
 }
 
 @-webkit-keyframes fadein {

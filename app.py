@@ -122,7 +122,7 @@ def cb_register(n_clicks, username, age, sex, email, tel):
 
     if n_clicks:
         register(username, age, sex, email, tel, hashed_pw)
-        return cstm.Notification('Registratie succesvol!', index=1), {'display':'block', '-webkit-animation':'fadein 1s linear forwards', 'animation':'fadein 1s linear forwards'}
+        return cstm.Notification('Registratie succesvol!', index=1), {'display':'block'}
     else:
         return [], {'display':'none'}
 
