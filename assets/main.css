@@ -20,7 +20,7 @@ a {
 }
 
 .notification {
-  position: absolute;
+  position: fixed;
   left: 50%;
   margin-top: 5%;
   transform: translateX(-50%);

@@ -49,7 +49,7 @@ def get_patient(conn, id):
 
 @with_connection(db=PATH)
 def get_patient_logs(conn, id):
-    sql = """SELECT * FROM logs WHERE patient=?;"""
+    sql = """SELECT * FROM logs WHERE patient=? ORDER BY day DESC;"""
     ret = []
     if not id:
         return ret

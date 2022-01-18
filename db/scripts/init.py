@@ -63,9 +63,11 @@ if __name__ == '__main__':
                               id integer PRIMARY KEY AUTOINCREMENT,
                               patient integer NOT NULL,
                               title text NOT NULL,
-                              date text NOT NULL,
-                              health integer NOT NULL,
-                              mood NOT NULL,
+                              day integer NOT NULL,
+                              month integer NOT NULL,
+                              year integer NOT NULL,
+                              health integer,
+                              mood integer,
                               extra text); """
 
     # create dummy entries
@@ -84,10 +86,10 @@ if __name__ == '__main__':
                                 (2, "Anouk Hooijschuur", 2, "v", 1.70, "avatar-f.png", 60.4, 0),
                                 (2, "Vera Verbanescu", 42, "v", 1.76, "avatar-f.png", 70.9, 0);"""
 
-    sql_insert_dummy_logs = """INSERT INTO logs (patient, title, date, health, mood, extra)
+    sql_insert_dummy_logs = """INSERT INTO logs (patient, title, day, month, year, health, mood, extra)
                              VALUES
-                             (2, "RITISH!", "17-01-2022", 3, 3, "Ritish voelt zich alweer erg goed."),
-                             (2, "ritish", "16-01-2022", 3, 3, "Ritish voelt zich goed.");"""
+                             (2, "RITISH!", 17, 1, 2022, 3, 3, "Ritish voelt zich alweer erg goed."),
+                             (2, "ritish", 16, 1, 2022, 3, 3, "Ritish voelt zich goed.");"""
 
     conn = create_connection(db)
 

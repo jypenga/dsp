@@ -232,29 +232,57 @@ def cb_switch_profile(info, medical, food):
 @app.callback(Output('app-entry-placeholder-1', 'children'),
               Output('app-entry-placeholder-1', 'style'),
               Output('app-box', 'style'),
+              Output({'type':'refresh-body', 'index': ALL}, 'children'),
               Input({'type':'add-button', 'index': ALL}, 'n_clicks'),
               Input({'type':'close-entry-button', 'index': ALL}, 'n_clicks'),
-              Input({'type':'save-entry-button', 'index': ALL}, 'n_clicks'))
-def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save):
+              Input({'type':'save-entry-button', 'index': ALL}, 'n_clicks'),
+              State({'type':'entry-input', 'index': ALL}, 'date'),
+              State({'type':'entry-input', 'index': ALL}, 'value'))
+def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     trigger = dash.callback_context.triggered[0]['prop_id']
-    content = [], {}, {}
+
+    if dates or inputs:
+        dates = [elem for elem in dates if elem]
+        inputs = [elem for elem in inputs if elem]
+        year, month, day = dates[0].split('-')
+        inputs = [elem for elem in inputs if elem]
+        inputs = inputs + [int(day), int(month), int(year)]
+        print(inputs)
+
+    pid = flask.request.cookies.get('pid')
+
+    print(trigger)
+
+    page = []
+    if 'log' in trigger:
+        patient = get_patient(pid)
+        logs = get_patient_logs(pid)
+        page = (cstm.LogsTable(patient, logs), )
+
+    content = [], {}, {}, page
+
     # show new entry
     if isinstance(n_clicks_add, list) and len(n_clicks_add) > 0 and n_clicks_add[0]:
         if 'log' in trigger:
-            content = cstm.NewLogEntry(date.today()), {'display':'block'}, {'opacity': '.5'}
+            content = cstm.NewLogEntry(date.today()), {'display':'block'}, {'opacity': '.5'}, page
         elif 'calendar' in trigger:
             print('calendar')
-            content = [], {}, {}
+            content = [], {}, {}, page
     # close (cancel) new entry
     if isinstance(n_clicks_close, list) and len(n_clicks_close) > 0 and n_clicks_close[0]:
-        content = [], {'display':'none'}, {'opacity': '1'}
+        content = [], {'display':'none'}, {'opacity': '1'}, page
     # save new entry
     if isinstance(n_clicks_save, list) and len(n_clicks_save) > 0 and n_clicks_save[0]:
-        # TODO: actually save to db
-        content = cstm.Notification('Log succesvol toegevoegd!'), {'display':'block'}, {'opacity': '1'}
+        if 'log' in trigger:
+            insert_log(pid, inputs)
+            patient = get_patient(pid)
+            logs = get_patient_logs(pid)
+            page = (cstm.LogsTable(patient, logs), )
+            content = cstm.Notification('Log succesvol toegevoegd!'), {'display':'block'}, {'opacity': '1'}, page
     # standard
     if len(n_clicks_add) != 1 and len(n_clicks_close) != 1 and len(n_clicks_save) != 1:
-        content = [], {}, {}
+        content = [], {}, {}, page
+    print(content)
     return content
 
 

@@ -188,12 +188,12 @@ class Custom():
 
     def NewLogEntry(self, date):
         content = html.Div([html.H3('NIEUWE LOG'), html.P("Naast de gemonitorde gezondheid op die dag, kun je hier zelf de stemming en andere bijzonderheden bijhouden. Dit kan belangrijk zijn om verandering over tijd vast te leggen."),
-        html.Table(html.Tbody([html.Tr([html.Td('Titel'), html.Td(dcc.Input(type='text'), colSpan=3)]),
-                               html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, date=date), colSpan=3)]), 
+        html.Table(html.Tbody([html.Tr([html.Td('Titel'), html.Td(dcc.Input(type='text', id={'type':'entry-input', 'index':'title'}), colSpan=3)]),
+                               html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, display_format='D-M-Y', date=date, id={'type':'entry-input', 'index':'date'}), colSpan=3)]), 
                                html.Tr([html.Td('Gezondheid'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
                                html.Tr([html.Td('Stemming'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
                                html.Tr([html.Td('Bijzonderheden')]),
-                               html.Tr([html.Td(dcc.Textarea(), colSpan=4)]),
+                               html.Tr([html.Td(dcc.Textarea(id={'type':'entry-input', 'index':'extra'}), colSpan=4)]),
                                ]), className='log-entry-table'), 
                                html.Button('x', id={'type':'close-entry-button', 'index':'log'}, className='close-entry-button'),
                                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'log'}, className='save-entry-button')], className='new-entry')
