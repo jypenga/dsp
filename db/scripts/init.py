@@ -86,8 +86,8 @@ if __name__ == '__main__':
 
     sql_insert_dummy_logs = """INSERT INTO logs (patient, title, date, health, mood, extra)
                              VALUES
-                             (2, "RITISH!", "17/01/2022", 3, 3, "Ritish voelt zich alweer erg goed."),
-                             (2, "ritish", "16/01/2022", 3, 3, "Ritish voelt zich goed.");"""
+                             (2, "RITISH!", "17-01-2022", 3, 3, "Ritish voelt zich alweer erg goed."),
+                             (2, "ritish", "16-01-2022", 3, 3, "Ritish voelt zich goed.");"""
 
     conn = create_connection(db)
 

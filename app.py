@@ -93,6 +93,10 @@ def display_page(path_1):
         patient = get_patient(pid)
         logs = get_patient_logs(pid)
         return LOGS(today, patient, logs)
+    elif check_path('/hartslag') and uid and pid:
+        patient = get_patient(pid)
+        logs = get_patient_logs(pid)
+        return LOGS(today, patient, logs)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)
