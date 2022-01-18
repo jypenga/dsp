@@ -25,6 +25,7 @@ from frames.dashboard import DASHBOARD
 from frames.profile import PROFILE
 from frames.calendar import CALENDAR
 from frames.checklist import CHECKLIST
+from frames.log import LOG
 
 # import backend funcs
 from backend.register import register
@@ -46,6 +47,7 @@ app.config.suppress_callback_exceptions = True
 # layout
 app.layout = html.Div([dcc.Location(id='url-1', refresh=False),
                        html.Div([], id='app-notification-placeholder-1', className='app-placeholder'),
+                       html.Div([], id='app-entry-placeholder-1', className='app-placeholder'),
                        html.Div([], id='app-placeholder-2', className='app-placeholder'),
                        html.Div([], id='app-placeholder-3', className='app-placeholder'),
                        html.Div([], id='app-box')])
@@ -86,6 +88,9 @@ def display_page(path_1):
     elif check_path('/profiel') and uid and pid:
         patient = get_patient(pid)
         return PROFILE(patient)
+    elif check_path('/logboek') and uid and pid:
+        patient = get_patient(pid)
+        return LOG(today, patient)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)
@@ -99,7 +104,7 @@ def display_page(path_1):
 # notifications wildcard callback
 @app.callback(Output({'type':'notification', 'index': ALL}, 'style'),
               Input({'type':'close-notification-button', 'index': ALL}, 'n_clicks'))
-def cb_select_patient(n_clicks):
+def cb_close_notification(n_clicks):
     if n_clicks[0]:
         return [{'display':'none'}]
     else:
@@ -212,9 +217,39 @@ def cb_switch_profile(info, medical, food):
     elif 'medical' in trigger:
         return cstm.ProfileTableMedical(patient), {}, {'border-bottom': '3px solid #3B72FF'}, {}
     elif 'food' in trigger:
-        return [], {}, {}, {'border-bottom': '3px solid #3B72FF'}
+        return cstm.ProfileTableFood(patient), {}, {}, {'border-bottom': '3px solid #3B72FF'}
     else:
         return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+
+
+# add new entry buttons wildcard callback
+@app.callback(Output('app-entry-placeholder-1', 'children'),
+              Output('app-entry-placeholder-1', 'style'),
+              Output('app-box', 'style'),
+              Input({'type':'add-button', 'index': ALL}, 'n_clicks'),
+              Input({'type':'close-entry-button', 'index': ALL}, 'n_clicks'),
+              Input({'type':'save-entry-button', 'index': ALL}, 'n_clicks'))
+def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save):
+    trigger = dash.callback_context.triggered[0]['prop_id']
+    content = [], {}, {}
+    # show new entry
+    if isinstance(n_clicks_add, list) and len(n_clicks_add) > 0 and n_clicks_add[0]:
+        if 'log' in trigger:
+            content = cstm.NewLogEntry(date.today()), {'display':'block'}, {'opacity': '.5'}
+        elif 'calendar' in trigger:
+            print('calendar')
+            content = [], {}, {}
+    # close (cancel) new entry
+    if isinstance(n_clicks_close, list) and len(n_clicks_close) > 0 and n_clicks_close[0]:
+        content = [], {'display':'none'}, {'opacity': '1'}
+    # save new entry
+    if isinstance(n_clicks_save, list) and len(n_clicks_save) > 0 and n_clicks_save[0]:
+        # TODO: actually save to db
+        content = cstm.Notification('Log succesvol toegevoegd!'), {'display':'block'}, {'opacity': '1'}
+    # standard
+    if len(n_clicks_add) != 1 and len(n_clicks_close) != 1 and len(n_clicks_save) != 1:
+        content = [], {}, {}
+    return content
 
 
 # start development server

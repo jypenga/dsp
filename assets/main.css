@@ -522,7 +522,7 @@ input[type=checkbox] {
 .dashboard-table tr {
   display: block;
   border-radius: 25px;
-  
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
   padding-top: 4%;
   padding-bottom: 4%;
   margin-top: 5%;
@@ -612,6 +612,111 @@ h3 {
 
 #profile-body h3 {
   text-align: center;
+}
+
+.add-button {
+  position: fixed;
+  bottom: 8%;
+  right: 4%;
+  background: #3B72FF;
+  color: white;
+  border-radius: 50%;
+  width: 125px;
+  height: 125px;
+  border: none;
+  font-size: 50pt;
+}
+
+.new-entry {
+  position: absolute;
+  width: 70%;
+  z-index: 17;
+  background: #FAFAFA;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(50%);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+  border-radius: 30px;
+  padding: 5%;
+}
+
+.new-entry .close-entry-button {
+  border: inherit;
+  outline: inherit;
+  color: gray;
+  background: none;
+  text-decoration: none;
+  font-size: 25pt;
+  font-weight: normal;
+  transform: none;
+  padding: 0;
+  font-family: inherit;
+  position: absolute;
+  right: 6%;
+  top: 3%;
+}
+
+.new-entry .save-entry-button {
+  float: right;
+  border: inherit;
+  outline: inherit;
+  color: white;
+  background-image: linear-gradient(to top, #3B72FF, #3b9aff);
+  text-decoration: none;
+  font-size: 25pt;
+  font-weight: normal;
+  transform: none;
+  padding: 0;
+  font-family: inherit;
+  padding: 2%;
+  border-radius: 15px;
+  margin-right: 4%;
+  margin-top: 2%;
+  right: 0;
+}
+
+.new-entry h3 {
+  text-align: center;
+}
+
+.new-entry p {
+  width: 100%;
+  margin: 0;
+  font-size: 25pt;
+  color: #171717;
+  font-weight: 700;
+  margin: 2%;
+}
+
+.new-entry table {
+  width: 100%;
+  font-size: 25pt;
+  color: #171717;
+  font-weight: 700;
+}
+
+.new-entry td {
+  padding: 2%;
+}
+
+.new-entry textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 15px;
+  border: none;
+  background-color: white;
+  padding: 10px;
+  width: 95%;
+  height: 10vh;
+}
+
+.new-entry .DateInput_input, .DateInput_input_1 {
+  font-size: 25pt;
+  width: 180%;
+}
+
+.new-entry .log-entry-table img {
+  width: 50px;
 }
 
 /* loading animation, probably needs changing */

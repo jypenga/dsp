@@ -82,7 +82,7 @@ class Custom():
         content = html.Div(html.Table(html.Tbody(html.Tr([html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-calendar.svg')), href='/agenda')), 
                                                           html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-checklist.svg')), href='/checklist')), 
                                                           html.Td(dcc.Link(html.Div(html.Img(src=self.app.get_asset_url('footer-icon-dashboard.svg')), id='app-footer-dashboard-container-background'), href='/dashboard'), id='app-footer-dashboard-container'), 
-                                                          html.Td(html.Img(src=self.app.get_asset_url('footer-icon-notifications.svg'))), 
+                                                          html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-log.svg')), href='/logboek')), 
                                                           html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('footer-icon-profile.svg')), href='/profiel'))]))), 
                     className='app-footer')
         return content
@@ -169,5 +169,26 @@ class Custom():
         return content
 
 
-    def ProfileTableFood(self):
+    def ProfileTableFood(self, patient):
         return []
+
+
+    def LogbookTable(self):
+        return []
+
+
+    def ChecklistTable(self):
+        return []
+
+
+    def NewLogEntry(self, date):
+        content = html.Div([html.H3('NIEUWE LOG'), html.P("Naast de gemonitorde gezondheid op die dag, kun je hier zelf de stemming en andere bijzonderheden bijhouden. Dit kan belangrijk zijn om verandering over tijd vast te leggen."),
+        html.Table(html.Tbody([html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, date=date), colSpan=3)]), 
+                               html.Tr([html.Td('Gezondheid'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
+                               html.Tr([html.Td('Stemming'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
+                               html.Tr([html.Td('Bijzonderheden')]),
+                               html.Tr([html.Td(dcc.Textarea(), colSpan=4)]),
+                               ]), className='log-entry-table'), 
+                               html.Button('x', id={'type':'close-entry-button', 'index':'log'}, className='close-entry-button'),
+                               html.Button('Opslaan', id={'type':'save-entry-button', 'index':'log'}, className='save-entry-button')], className='new-entry')
+        return content
