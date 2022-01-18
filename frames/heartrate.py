@@ -8,14 +8,14 @@ from templates.main import Custom
 
 cstm = Custom()
 
-def HEARTRATE(name, patients):
+def HEARTRATE(patient):
 
     # hier niks aan veranderen
-    return [cstm.AppHeader(top_left='Patienten', top_left_sub=name, middle=len(patients), middle_sub='Patienten', top_right='header-icon-patients.svg'),
+    return [cstm.AppHeader(top_left='Hartslag', top_right='header-icon-heartrate.svg', top_right_id='app-header-icon-transparent'),
 
     # hier relatief weining shit aan toevoegen
     html.Div([],
     className='app-body'),
 
     # hier niks aan veranderen
-    cstm.AppFooter(buttons=False)]
+    cstm.AppFooter(buttons=True)]

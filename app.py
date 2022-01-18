@@ -26,6 +26,7 @@ from frames.profile import PROFILE
 from frames.calendar import CALENDAR
 from frames.checklist import CHECKLIST
 from frames.log import LOGS
+from frames.heartrate import HEARTRATE
 
 # import backend funcs
 from backend.register import register
@@ -95,8 +96,7 @@ def display_page(path_1):
         return LOGS(today, patient, logs)
     elif check_path('/hartslag') and uid and pid:
         patient = get_patient(pid)
-        logs = get_patient_logs(pid)
-        return LOGS(today, patient, logs)
+        return HEARTRATE(patient)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)

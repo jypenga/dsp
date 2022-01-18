@@ -190,6 +190,14 @@ a {
   position: absolute;
 }
 
+#app-header-icon-transparent {
+  height: 22%;
+  top: 14%;
+  right: 6%;
+  opacity: .4;
+  position: absolute;
+}
+
 #app-header-avatar {
   height: 22%;
   top: 14%;
