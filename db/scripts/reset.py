@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     sql_delete_users = """DROP TABLE users;"""
     sql_delete_patients = """DROP TABLE patients;"""
+    sql_delete_logs = """DROP TABLE logs;"""
 
     conn = create_connection(db)
 
@@ -34,6 +35,7 @@ if __name__ == '__main__':
         if conn is not None:
             delete_all(conn, sql_delete_users)
             delete_all(conn, sql_delete_patients)
+            delete_all(conn, sql_delete_logs)
         else:
             print("Error! cannot create the database connection.")
         print('Database succesfully reset.')

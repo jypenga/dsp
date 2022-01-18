@@ -173,8 +173,13 @@ class Custom():
         return []
 
 
-    def LogbookTable(self):
-        return []
+    def LogsTable(self, patient, logs):
+        color = '#ecfaff'
+        content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'smiley-positive.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
+                                                  html.Td([html.H2(log[2]), html.P(log[-1])], className='dashboard-card-text'), 
+                                                  html.Td(log[3])]) for log in logs]),
+                                                  className='dashboard-table')
+        return content
 
 
     def ChecklistTable(self):
@@ -183,7 +188,8 @@ class Custom():
 
     def NewLogEntry(self, date):
         content = html.Div([html.H3('NIEUWE LOG'), html.P("Naast de gemonitorde gezondheid op die dag, kun je hier zelf de stemming en andere bijzonderheden bijhouden. Dit kan belangrijk zijn om verandering over tijd vast te leggen."),
-        html.Table(html.Tbody([html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, date=date), colSpan=3)]), 
+        html.Table(html.Tbody([html.Tr([html.Td('Titel'), html.Td(dcc.Input(type='text'), colSpan=3)]),
+                               html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, date=date), colSpan=3)]), 
                                html.Tr([html.Td('Gezondheid'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
                                html.Tr([html.Td('Stemming'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
                                html.Tr([html.Td('Bijzonderheden')]),

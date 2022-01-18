@@ -25,12 +25,13 @@ from frames.dashboard import DASHBOARD
 from frames.profile import PROFILE
 from frames.calendar import CALENDAR
 from frames.checklist import CHECKLIST
-from frames.log import LOG
+from frames.log import LOGS
 
 # import backend funcs
 from backend.register import register
 from backend.login import login
-from backend.get import *
+from backend.select import *
+from backend.insert import *
 
 cstm = Custom()
 
@@ -90,7 +91,8 @@ def display_page(path_1):
         return PROFILE(patient)
     elif check_path('/logboek') and uid and pid:
         patient = get_patient(pid)
-        return LOG(today, patient)
+        logs = get_patient_logs(pid)
+        return LOGS(today, patient, logs)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)

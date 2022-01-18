@@ -713,6 +713,14 @@ h3 {
 .new-entry .DateInput_input, .DateInput_input_1 {
   font-size: 25pt;
   width: 180%;
+  border: none;
+}
+
+.new-entry input {
+  font-size: 25pt;
+  width: 100%;
+  border: none;
+  padding: 11px 11px 9px;
 }
 
 .new-entry .log-entry-table img {
