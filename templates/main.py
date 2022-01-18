@@ -177,7 +177,7 @@ class Custom():
         color = '#ecfaff'
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'smiley-positive.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(log[2]), html.P(log[-1])], className='dashboard-card-text'), 
-                                                  html.Td(log[3])]) for log in logs]),
+                                                  html.Td(log[3])], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {color} 70%, transparent 70%)'}) for log in logs]),
                                                   className='dashboard-table')
         return content
 

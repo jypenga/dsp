@@ -247,11 +247,8 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
         year, month, day = dates[0].split('-')
         inputs = [elem for elem in inputs if elem]
         inputs = inputs + [int(day), int(month), int(year)]
-        print(inputs)
 
     pid = flask.request.cookies.get('pid')
-
-    print(trigger)
 
     page = []
     if 'log' in trigger:
@@ -282,7 +279,6 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     # standard
     if len(n_clicks_add) != 1 and len(n_clicks_close) != 1 and len(n_clicks_save) != 1:
         content = [], {}, {}, page
-    print(content)
     return content
 
 
