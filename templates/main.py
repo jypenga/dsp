@@ -198,3 +198,53 @@ class Custom():
                                html.Button('x', id={'type':'close-entry-button', 'index':'log'}, className='close-entry-button'),
                                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'log'}, className='save-entry-button')], className='new-entry')
         return content
+
+    def HrTable(self, patient):
+
+        subjects = ['Gem bpm rust', 'Gem bpm actief', 'Fitness level', 'Endurance']
+
+        # create block
+        def block(subject):
+            return html.Td(html.Button([html.Div([subject]), html.P('69')]))
+        
+        # create table from blocks
+        content = html.Table(
+           html.Tbody(
+               [
+                html.Tr(block(subjects[0])),
+                html.Tr(block(subjects[1])),
+            #     html.Tr(block(subjects[2])),
+            #     html.Tr(block(subjects[3]))
+               ]
+           ) 
+        )
+
+
+        return content
+
+
+    #  def PatientTable(self, patients):
+    #     # group by 2
+    #     tmp = None
+    #     if len(patients) % 2 == 0:
+    #         patients = list(zip(patients, patients[1:]))[::2]
+    #     else:
+    #         tmp = patients[-1]
+    #         patients = patients[:-1] if len(patients) > 1 else []
+    #         patients = list(zip(patients, patients[1:]))[::2]
+
+    #     # create card
+    #     def PatientCard(patient):
+    #         avatar = 'avatar-m.png' if patient[4] == 'm' else 'avatar-f.png'
+    #         return html.Td(html.Button(html.Div([html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='patient-card-smiley-score'),
+    #                                 html.Img(src=self.app.get_asset_url(avatar)), 
+    #                                 patient[2]], className='app-patient-card'), id={'type':'app-patient-card', 'index':patient[0]}))
+
+    #     # create table from cards
+    #     content = html.Table(html.Tbody([*[html.Tr([PatientCard(duo[0]), PatientCard(duo[1])]) for duo in patients], 
+    #                                        html.Tr(PatientCard(tmp) if tmp else [])]), 
+    #                                         id='app-patient-table')
+    #     return content
+
+
+
