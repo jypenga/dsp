@@ -6,7 +6,7 @@ from datetime import datetime
 
 import os
 
-heart_rate = pd.read_csv(os.path.join('..', 'Data', 'heartrate_seconds_merged.csv'))
+heart_rate = pd.read_csv(os.path.join('..', 'Data', 'heartrate_seconds_merged.csv')) #, nrows=100000)
 heart_rate.Time = heart_rate.Time.apply(lambda s: datetime.strptime(s, '%m/%d/%Y %I:%M:%S %p'))
 
 # only select heart rates between 07:00 and 22:00
@@ -60,7 +60,6 @@ if __name__ == '__main__':
     sql_create_heartrate_table = """CREATE TABLE IF NOT EXISTS heartrate (
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 patient int NOT NULL,
-                                time integer NOT NULL,
                                 value int NOT NULL,
                                 year int NOT NULL,
                                 month int NOT NULL,
@@ -69,17 +68,36 @@ if __name__ == '__main__':
                                 minute int NOT NULL,
                                 second int NOT NULL); """
 
-    sql_insert_dummy_heartrate = """INSERT INTO users (name, age, sex, email, phone, password)
+    sql_insert_dummy_heartrate = """INSERT INTO heartrate (patient, value, year, month, day, hour, minute, second)
                              VALUES
-                             ("Admin Admin", 99, "a", "admin@monizorg.nl", "1234", ?),
-                             ("Boris Boef", 13, "m", "bboef@duckstad.nl", "1234", ?);"""
+                             (2, ?, ?, ?, ?, ?, ?, ?);"""
 
     conn = create_connection(db)
 
     if conn is not None:
         create_table(conn, sql_create_heartrate_table)
+
+        heart_rate = heart_rate.drop(columns=['Id', 'Time'])
+
+        query = """INSERT INTO heartrate (patient, value, year, month, day, hour, minute, second)
+                VALUES
+                """
         
-        # do(conn, sql_insert_dummy_users, hashed_pw_1, hashed_pw_2) 
+        for index, row in heart_rate.iterrows():
+            # do(conn, sql_insert_dummy_heartrate, *row)
+            query += """(2, {}, {}, {}, {}, {}, {}, {})""".format(*row)
+
+            if index != len(heart_rate) - 1:
+                query += """,
+            """ 
+            else:
+                query += """;"""
+                break
+
+            if index % 100000 == 0:
+                print(index)
+
+        do(conn, query)
 
     else:
         print("Error! cannot create the database connection.")
