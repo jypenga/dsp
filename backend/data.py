@@ -6,7 +6,7 @@ from datetime import datetime
 
 import os
 
-heart_rate = pd.read_csv('/Users/kevintran/Desktop/VS Code/DSP/Data')
+heart_rate = pd.read_csv(os.path.join('..', 'Data', 'heartrate_seconds_merged.csv'))
 heart_rate.Time = heart_rate.Time.apply(lambda s: datetime.strptime(s, '%m/%d/%Y %I:%M:%S %p'))
 
 # only select heart rates between 07:00 and 22:00
