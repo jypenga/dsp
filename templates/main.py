@@ -143,41 +143,57 @@ class Custom():
 
 
     def ProfileTableInfo(self, patient):
-        content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-user.svg'))), html.Td('Naam'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
+        content = [html.H3('ALGEMENE INFORMATIE'),
+                html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-user.svg'))), html.Td('Naam'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
                 html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-age.svg'))), html.Td('Leeftijd'), html.Td(dcc.Input(id='input-age', type='number', value=patient[3]))]),
                 html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-sex.svg'))), html.Td('Geslacht'), html.Td(dcc.Dropdown(id='input-sex', options=[{'label':'man', 'value':'m'}, {'label':'vrouw', 'value':'v'}, {'label':'anders', 'value':'a'}], placeholder='', clearable=False, value=patient[4]))]),
                 html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-height.svg'))), html.Td('Lengte'), html.Td(dcc.Input(id='input-email', type='text', value=f'{patient[5]} m'))]),
                 html.Tr([html.Td(html.Img(src=self.app.get_asset_url('icon-weight.svg'))), html.Td('Gewicht'), html.Td(dcc.Input(id='input-phone', type='text', value=f'{patient[6]} kg'))]),
-                ]), id='app-register-table')
-        return content
-
-
-    def ProfileTableMedical(self, patient):
-        content = [html.H3('MEDISCHE INFORMATIE'),
-                html.Table(html.Tbody([html.Tr([html.Td('Huisarts'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
-                html.Tr([html.Td('Tel. huisarts'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]))]),
-                html.Tr([html.Td('Zorgverzekering'), html.Td(dcc.Input(id='input-sex', type='text', value=patient[4]))]),
-                html.Tr([html.Td('Achtergrond'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'))]),
-                ]), id='app-register-table'),
-                html.H3('MEDICATIE'),
-                html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]))]),
-                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]))]),
-                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Input(id='input-sex', type='text', value=patient[4]))]),
-                html.Tr([html.Td('Maaltijd'), html.Td(dcc.Input(id='input-email', type='text', value=f'{patient[5]} m'))]),
-                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'))]),
                 ]), id='app-register-table')]
         return content
 
 
+    def ProfileTableMedical(self, patient):
+        content = [html.H3('ALGEMENE MEDISCHE INFORMATIE'),
+                html.Table(html.Tbody([html.Tr([html.Td('Huisarts'), html.Td(dcc.Input(id='input-user', type='text', value=patient[9]))]),
+                html.Tr([html.Td('Tel. huisarts'), html.Td(dcc.Input(id='input-age', type='text', value=patient[10]))]),
+                html.Tr([html.Td('Zorgverzekering'), html.Td(dcc.Input(id='input-sex', type='text', value=patient[11]))]),
+                html.Tr([html.Td('Achtergrond'), html.Td(dcc.Textarea(id='input-email', value=patient[12]))]),
+                ]), id='app-medical-table'),
+                html.H3('MEDICATIE'),
+                html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]), colSpan=4)]),
+                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]), colSpan=4)]),
+                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=['1'])), html.Td(dcc.Input(id='input-age', type='text', value='08:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='09:00'))]),
+                html.Tr([html.Td('Maaltijd'), html.Td(dcc.Dropdown(options=[{'label':'Geen', 'value':'0'}, 
+                                                                            {'label':'Ontbijt', 'value':'1'}, 
+                                                                            {'label':'Lunch', 'value':'2'},
+                                                                            {'label':'Diner', 'value':'3'}], value='0'), colSpan=4)]),
+                html.Tr([html.Td(dcc.Checklist(options=[{'label':'Voor', 'value':'1'}, 
+                                                        {'label':'Tijdens', 'value':'2'}, 
+                                                        {'label':'Na', 'value':'3'}], labelStyle={'display': 'inline-block'
+                                                        }), colSpan=5)]),
+                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'), colSpan=4)]),
+                ]), id='app-medication-table'),]
+        return content
+
+
     def ProfileTableFood(self, patient):
-        return []
+        content = [html.H3('MAALTIJDEN'),
+                   html.Table(html.Tbody([html.Tr([html.Td('Ontbijt'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=['1'])), html.Td(dcc.Input(id='input-age', type='text', value='08:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='09:00'))]),
+                   html.Tr([html.Td('Lunch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'2'}], value=['2'])), html.Td(dcc.Input(id='input-age', type='text', value='12:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='13:00'))]),
+                   html.Tr([html.Td('Diner'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'3'}], value=['3'])), html.Td(dcc.Input(id='input-age', type='text', value='17:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='18:00'))]),
+                   html.Tr([html.Td('Vegetarisch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'breakfast'}])), html.Td('Vegan'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'breakfast'}]))]),
+                   html.Tr([html.Td('Allergieen'), html.Td(dcc.Textarea(id='input-email'), colSpan=4)]),
+                   html.Tr([html.Td(['Bijzonder-', html.Br(), 'heden']), html.Td(dcc.Textarea(id='input-email'), colSpan=4)]),
+                   ]), id='app-food-table')]
+        return content
 
 
     def LogsTable(self, patient, logs):
         color = '#ecfaff'
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'smiley-positive.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(log[2]), html.P(log[-1])], className='dashboard-card-text'), 
-                                                  html.Td(log[3])], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {color} 70%, transparent 70%)'}) for log in logs]),
+                                                  html.Td(f'{log[3]}-{log[4]}')], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {color} 70%, transparent 70%)'}) for log in logs]),
                                                   className='dashboard-table')
         return content
 
@@ -199,52 +215,30 @@ class Custom():
                                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'log'}, className='save-entry-button')], className='new-entry')
         return content
 
+
     def HrTable(self, patient):
 
         subjects = ['Gem bpm rust', 'Gem bpm actief', 'Fitness level', 'Endurance']
 
         # create block
         def block(subject):
-            return html.Td(html.Button([html.Div([subject]), html.P('69')]))
+            return html.Td(html.Div([subject, html.P('69')], className='app-data-card'))
         
         # create table from blocks
         content = html.Table(
            html.Tbody(
-               [
-                html.Tr(block(subjects[0])),
-                html.Tr(block(subjects[1])),
+               [html.Tr(html.Td(html.Div(['grafiek', html.P('420')], className='app-main-data-card'), colSpan=2)),
+                html.Tr([block(subjects[0]), block(subjects[1])]),
+                html.Tr([block(subjects[2]), block(subjects[3])]),
             #     html.Tr(block(subjects[2])),
             #     html.Tr(block(subjects[3]))
                ]
-           ) 
+           ), className='app-data-table' 
         )
 
 
         return content
 
 
-    #  def PatientTable(self, patients):
-    #     # group by 2
-    #     tmp = None
-    #     if len(patients) % 2 == 0:
-    #         patients = list(zip(patients, patients[1:]))[::2]
-    #     else:
-    #         tmp = patients[-1]
-    #         patients = patients[:-1] if len(patients) > 1 else []
-    #         patients = list(zip(patients, patients[1:]))[::2]
-
-    #     # create card
-    #     def PatientCard(patient):
-    #         avatar = 'avatar-m.png' if patient[4] == 'm' else 'avatar-f.png'
-    #         return html.Td(html.Button(html.Div([html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='patient-card-smiley-score'),
-    #                                 html.Img(src=self.app.get_asset_url(avatar)), 
-    #                                 patient[2]], className='app-patient-card'), id={'type':'app-patient-card', 'index':patient[0]}))
-
-    #     # create table from cards
-    #     content = html.Table(html.Tbody([*[html.Tr([PatientCard(duo[0]), PatientCard(duo[1])]) for duo in patients], 
-    #                                        html.Tr(PatientCard(tmp) if tmp else [])]), 
-    #                                         id='app-patient-table')
-    #     return content
-
-
-
+    def Calendar(self):
+        return html.Img(src=self.app.get_asset_url('calendar.svg'))

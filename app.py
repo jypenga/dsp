@@ -224,7 +224,7 @@ def cb_switch_profile(info, medical, food):
         return cstm.ProfileTableMedical(patient), {}, {'border-bottom': '3px solid #3B72FF'}, {}
     elif 'food' in trigger:
         return cstm.ProfileTableFood(patient), {}, {}, {'border-bottom': '3px solid #3B72FF'}
-    else:
+    elif '.' in trigger:
         return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
 
 
@@ -249,9 +249,10 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
         inputs = inputs + [int(day), int(month), int(year)]
 
     pid = flask.request.cookies.get('pid')
-
     page = []
-    if 'log' in trigger:
+    if trigger == '.':
+        raise dash.exceptions.PreventUpdate
+    elif 'log' in trigger:
         patient = get_patient(pid)
         logs = get_patient_logs(pid)
         page = (cstm.LogsTable(patient, logs), )

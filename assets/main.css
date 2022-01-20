@@ -438,6 +438,50 @@ input[type=checkbox] {
   height: 50px;
 }
 
+#app-food-table, #app-medical-table, #app-medication-table {
+  font-size: 32pt;
+  font-weight: 700;
+  color: #171717;
+  margin: 5%;
+  margin-right: 7%;
+}
+
+#app-food-table td, #app-medical-table td, #app-medication-table td {
+  padding: 20px;
+}
+
+#app-food-table td input[type=checkbox], #app-medication-table td input[type=checkbox] {
+  zoom: 3;
+  vertical-align: middle;
+  border: #486581;
+  width: 15px;
+}
+
+#app-medication-table td label {
+  min-width: 22%;
+  float: right;
+}
+
+#app-food-table input, #app-medical-table input, #app-medication-table input {
+  font-size: inherit;
+  border-radius: 15px;
+  border: none;
+  background-color: #FAFAFA;
+  padding: 10px;
+  width: 100%;
+}
+
+#app-food-table textarea, #app-medical-table textarea, #app-medication-table textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 15px;
+  border: none;
+  background-color: #FAFAFA;
+  padding: 10px;
+  width: 95%;
+  height: 10vh;
+}
+
 .login-table {
   font-size: 26pt;
   font-weight: bolder;
@@ -504,6 +548,35 @@ input[type=checkbox] {
   margin-right: 15px !important;
   margin-top: 15px !important;
   width: 15% !important;
+}
+
+.app-data-table {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 25pt;
+  font-weight: 700;
+  width: 90%;
+}
+
+.app-main-data-card {
+  padding: 2.5%;
+  padding-bottom: 10%;
+  margin: 2.5%;
+  border-spacing: 25px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
+}
+
+.app-data-card {
+  padding: 5%;
+  padding-bottom: 10%;
+  margin: 5%;
+  border-spacing: 25px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
 }
 
 .dashboard-table {
@@ -761,4 +834,10 @@ h3 {
   position: inherit !important;
   text-decoration: inherit !important;
   color: inherit !important;
+}
+
+#calendar-body img {
+  width: 90%;
+  margin: 2.5%;
+  margin-top: -5.5%;
 }
