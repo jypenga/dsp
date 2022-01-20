@@ -230,10 +230,7 @@ class Custom():
            html.Tbody(
                [html.Tr(html.Td(html.Div(['grafiek', html.P('420')], className='app-main-data-card'), colSpan=2)),
                 html.Tr([block(subjects[0]), block(subjects[1])]),
-                html.Tr([block(subjects[2]), block(subjects[3])]),
-            #     html.Tr(block(subjects[2])),
-            #     html.Tr(block(subjects[3]))
-               ]
+                html.Tr([block(subjects[2]), block(subjects[3])])]
            ), className='app-data-table' 
         )
 
