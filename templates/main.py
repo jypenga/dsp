@@ -153,7 +153,7 @@ class Custom():
         return content
 
 
-    def ProfileTableMedical(self, patient):
+    def ProfileTableMedical(self, patient, medication):
         content = [html.H3('ALGEMENE MEDISCHE INFORMATIE'),
                 html.Table(html.Tbody([html.Tr([html.Td('Huisarts'), html.Td(dcc.Input(id='input-user', type='text', value=patient[9]))]),
                 html.Tr([html.Td('Tel. huisarts'), html.Td(dcc.Input(id='input-age', type='text', value=patient[10]))]),
@@ -161,30 +161,31 @@ class Custom():
                 html.Tr([html.Td('Achtergrond'), html.Td(dcc.Textarea(id='input-email', value=patient[12]))]),
                 ]), id='app-medical-table'),
                 html.H3('MEDICATIE'),
-                html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id='input-user', type='text', value=patient[2]), colSpan=4)]),
-                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id='input-age', type='text', value=patient[3]), colSpan=4)]),
-                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=['1'])), html.Td(dcc.Input(id='input-age', type='text', value='08:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='09:00'))]),
+                *[html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id='input-user', type='text', value=medicine[2]), colSpan=4)]),
+                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id='input-age', type='text', value=medicine[3]), colSpan=4)]),
+                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(medicine[4])])), html.Td(dcc.Input(id='input-age', type='text', value=medicine[5])), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value=medicine[6]))]),
                 html.Tr([html.Td('Maaltijd'), html.Td(dcc.Dropdown(options=[{'label':'Geen', 'value':'0'}, 
                                                                             {'label':'Ontbijt', 'value':'1'}, 
                                                                             {'label':'Lunch', 'value':'2'},
-                                                                            {'label':'Diner', 'value':'3'}], value='0'), colSpan=4)]),
+                                                                            {'label':'Diner', 'value':'3'}], value=str(medicine[7])), colSpan=4)]),
                 html.Tr([html.Td(dcc.Checklist(options=[{'label':'Voor', 'value':'1'}, 
                                                         {'label':'Tijdens', 'value':'2'}, 
                                                         {'label':'Na', 'value':'3'}], labelStyle={'display': 'inline-block'
-                                                        }), colSpan=5)]),
-                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id='input-email', value=f'{patient[5]} m'), colSpan=4)]),
-                ]), id='app-medication-table'),]
+                                                        }, value=[str(medicine[8])]), colSpan=5)]),
+                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id='input-email', value=medicine[9]), colSpan=4)]),
+                html.Tr([html.Td(html.Hr(), colSpan=5)]),
+                ]), className='app-medication-table') for medicine in medication]]
         return content
 
 
-    def ProfileTableFood(self, patient):
+    def ProfileTableFood(self, patient, diet):
         content = [html.H3('MAALTIJDEN'),
-                   html.Table(html.Tbody([html.Tr([html.Td('Ontbijt'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=['1'])), html.Td(dcc.Input(id='input-age', type='text', value='08:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='09:00'))]),
-                   html.Tr([html.Td('Lunch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'2'}], value=['2'])), html.Td(dcc.Input(id='input-age', type='text', value='12:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='13:00'))]),
-                   html.Tr([html.Td('Diner'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'3'}], value=['3'])), html.Td(dcc.Input(id='input-age', type='text', value='17:00')), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value='18:00'))]),
-                   html.Tr([html.Td('Vegetarisch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'breakfast'}])), html.Td('Vegan'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'breakfast'}]))]),
-                   html.Tr([html.Td('Allergieen'), html.Td(dcc.Textarea(id='input-email'), colSpan=4)]),
-                   html.Tr([html.Td(['Bijzonder-', html.Br(), 'heden']), html.Td(dcc.Textarea(id='input-email'), colSpan=4)]),
+                   html.Table(html.Tbody([html.Tr([html.Td('Ontbijt'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(diet[2])])), html.Td(dcc.Input(id='input-age', type='text', value=diet[3])), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value=diet[4]))]),
+                   html.Tr([html.Td('Lunch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(diet[5])])), html.Td(dcc.Input(id='input-age', type='text', value=diet[6])), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value=diet[7]))]),
+                   html.Tr([html.Td('Diner'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(diet[8])])), html.Td(dcc.Input(id='input-age', type='text', value=diet[9])), html.Td('↔'), html.Td(dcc.Input(id='input-age', type='text', value=diet[10]))]),
+                   html.Tr([html.Td('Vegetarisch'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(diet[11])])), html.Td('Vegan'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], value=[str(diet[12])]))]),
+                   html.Tr([html.Td('Allergieen'), html.Td(dcc.Textarea(id='input-email', value=diet[13]), colSpan=4)]),
+                   html.Tr([html.Td(['Bijzonder-', html.Br(), 'heden']), html.Td(dcc.Textarea(id='input-email', value=diet[14]), colSpan=4)]),
                    ]), id='app-food-table')]
         return content
 

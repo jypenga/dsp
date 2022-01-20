@@ -57,7 +57,34 @@ if __name__ == '__main__':
                                    provider text,
                                    background text); """
 
-    sql_create_medication_table = """"""
+    sql_create_medication_table = """CREATE TABLE IF NOT EXISTS medication (
+                                id integer PRIMARY KEY AUTOINCREMENT,
+                                patient integer NOT NULL,
+                                name text NOT NULL,
+                                type text NOT NULL,
+                                time_range integer NOT NULL,
+                                time_start text NOT NULL,
+                                time_end text NOT NULL,
+                                meal integer NOT NULL,
+                                specific integer NOT NULL,
+                                reason text); """
+
+    sql_create_diet_table = """CREATE TABLE IF NOT EXISTS diet (
+                                id integer PRIMARY KEY AUTOINCREMENT,
+                                patient integer NOT NULL,
+                                breakfast integer NOT NULL,
+                                breakfast_start text,
+                                breakfast_end text,
+                                lunch integer NOT NULL,
+                                lunch_start text,
+                                lunch_end text,
+                                dinner integer NOT NULL,
+                                dinner_start text,
+                                dinner_end text,
+                                vegetarian integer,
+                                vegan integer,
+                                allergies text,
+                                extra text); """
 
     sql_create_log_table = """CREATE TABLE IF NOT EXISTS logs (
                               id integer PRIMARY KEY AUTOINCREMENT,
@@ -91,11 +118,22 @@ if __name__ == '__main__':
                              (2, "RITISH!", 17, 1, 2022, 3, 3, "Ritish voelt zich alweer erg goed."),
                              (2, "ritish", 16, 1, 2022, 3, 3, "Ritish voelt zich goed.");"""
 
+    sql_insert_dummy_medication = """INSERT INTO medication (patient, name, type, time_range, time_start, time_end, meal, specific, reason)
+                             VALUES
+                             (2, "XTC", "Pillen", 1, "23:00", "24:00", 3, 3, "Lekker genieten."),
+                             (2, "Insuline", "Injectie", 1, "8:00", "9:00", 1, 1, "Noodzaak.");"""
+
+    sql_insert_dummy_diet = """INSERT INTO diet (patient, breakfast, breakfast_start, breakfast_end, lunch, dinner, dinner_start, dinner_end, vegetarian, allergies, extra)
+                             VALUES
+                             (2, 1, "8:00", "9:00", 0, 1, "18:00", "19:00", 1, "Pinda's", "Houdt niet van andijvie.");"""
+
     conn = create_connection(db)
 
     if conn is not None:
         create_table(conn, sql_create_users_table)
         create_table(conn, sql_create_patients_table)
+        create_table(conn, sql_create_medication_table)
+        create_table(conn, sql_create_diet_table)
         create_table(conn, sql_create_log_table)
 
         hashed_pw_1 = bcrypt.hashpw(bytes('admin', encoding='utf-8'), bcrypt.gensalt())
@@ -103,6 +141,8 @@ if __name__ == '__main__':
 
         do(conn, sql_insert_dummy_users, hashed_pw_1, hashed_pw_2)
         do(conn, sql_insert_dummy_patients)
+        do(conn, sql_insert_dummy_medication)
+        do(conn, sql_insert_dummy_diet)
         do(conn, sql_insert_dummy_logs)
     else:
         print("Error! cannot create the database connection.")

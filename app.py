@@ -221,9 +221,11 @@ def cb_switch_profile(info, medical, food):
     if 'info' in trigger:
         return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
     elif 'medical' in trigger:
-        return cstm.ProfileTableMedical(patient), {}, {'border-bottom': '3px solid #3B72FF'}, {}
+        medication = get_patient_medication(GC_PID)
+        return cstm.ProfileTableMedical(patient, medication), {}, {'border-bottom': '3px solid #3B72FF'}, {}
     elif 'food' in trigger:
-        return cstm.ProfileTableFood(patient), {}, {}, {'border-bottom': '3px solid #3B72FF'}
+        diet = get_patient_diet(GC_PID)
+        return cstm.ProfileTableFood(patient, diet), {}, {}, {'border-bottom': '3px solid #3B72FF'}
     elif '.' in trigger:
         return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
 

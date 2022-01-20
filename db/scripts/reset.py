@@ -1,4 +1,5 @@
 import os
+from re import A
 import sys
 import sqlite3
 
@@ -26,6 +27,8 @@ if __name__ == '__main__':
 
     sql_delete_users = """DROP TABLE users;"""
     sql_delete_patients = """DROP TABLE patients;"""
+    sql_delete_medication = """DROP TABLE medication;"""
+    sql_delete_diet = """DROP TABLE diet;"""
     sql_delete_logs = """DROP TABLE logs;"""
 
     conn = create_connection(db)
@@ -35,6 +38,8 @@ if __name__ == '__main__':
         if conn is not None:
             delete_all(conn, sql_delete_users)
             delete_all(conn, sql_delete_patients)
+            delete_all(conn, sql_delete_medication)
+            delete_all(conn, sql_delete_diet)
             delete_all(conn, sql_delete_logs)
         else:
             print("Error! cannot create the database connection.")

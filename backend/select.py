@@ -48,6 +48,34 @@ def get_patient(conn, id):
     return ret
 
 @with_connection(db=PATH)
+def get_patient_medication(conn, id):
+    sql = """SELECT * FROM medication WHERE patient=? ORDER BY id ASC;"""
+    ret = []
+    if not id:
+        return ret
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id))
+        ret = c.fetchall()
+    except Error as e:
+        print(e)
+    return ret
+
+@with_connection(db=PATH)
+def get_patient_diet(conn, id):
+    sql = """SELECT * FROM diet WHERE patient=?;"""
+    ret = []
+    if not id:
+        return ret
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id))
+        ret = c.fetchall()[0]
+    except Error as e:
+        print(e)
+    return ret
+
+@with_connection(db=PATH)
 def get_patient_logs(conn, id):
     sql = """SELECT * FROM logs WHERE patient=? ORDER BY day DESC;"""
     ret = []

@@ -438,7 +438,7 @@ input[type=checkbox] {
   height: 50px;
 }
 
-#app-food-table, #app-medical-table, #app-medication-table {
+#app-food-table, #app-medical-table, .app-medication-table {
   font-size: 32pt;
   font-weight: 700;
   color: #171717;
@@ -446,23 +446,23 @@ input[type=checkbox] {
   margin-right: 7%;
 }
 
-#app-food-table td, #app-medical-table td, #app-medication-table td {
+#app-food-table td, #app-medical-table td, .app-medication-table td {
   padding: 20px;
 }
 
-#app-food-table td input[type=checkbox], #app-medication-table td input[type=checkbox] {
+#app-food-table td input[type=checkbox], .app-medication-table td input[type=checkbox] {
   zoom: 3;
   vertical-align: middle;
   border: #486581;
   width: 15px;
 }
 
-#app-medication-table td label {
+.app-medication-table td label {
   min-width: 22%;
   float: right;
 }
 
-#app-food-table input, #app-medical-table input, #app-medication-table input {
+#app-food-table input, #app-medical-table input, .app-medication-table input {
   font-size: inherit;
   border-radius: 15px;
   border: none;
@@ -471,7 +471,7 @@ input[type=checkbox] {
   width: 100%;
 }
 
-#app-food-table textarea, #app-medical-table textarea, #app-medication-table textarea {
+#app-food-table textarea, #app-medical-table textarea, .app-medication-table textarea {
   font-family: inherit;
   font-size: inherit;
   border-radius: 15px;
