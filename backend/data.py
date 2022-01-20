@@ -60,16 +60,19 @@ if __name__ == '__main__':
     sql_create_heartrate_table = """CREATE TABLE IF NOT EXISTS heartrate (
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 patient int NOT NULL,
-                                Time integer NOT NULL,
-                                Value int NOT NULL,
-                                jaar int NOT NULL,
-                                maand int NOT NULL,
-                                dag int NOT NULL,
-                                uur int NOT NULL,
-                                minuut int NOT NULL,
-                                seconde int NOT NULL); """
+                                time integer NOT NULL,
+                                value int NOT NULL,
+                                year int NOT NULL,
+                                month int NOT NULL,
+                                day int NOT NULL,
+                                hour int NOT NULL,
+                                minute int NOT NULL,
+                                second int NOT NULL); """
 
-
+    sql_insert_dummy_heartrate = """INSERT INTO users (name, age, sex, email, phone, password)
+                             VALUES
+                             ("Admin Admin", 99, "a", "admin@monizorg.nl", "1234", ?),
+                             ("Boris Boef", 13, "m", "bboef@duckstad.nl", "1234", ?);"""
 
     conn = create_connection(db)
 
