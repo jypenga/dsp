@@ -96,7 +96,8 @@ def display_page(path_1):
         return LOGS(today, patient, logs)
     elif check_path('/hartslag') and uid and pid:
         patient = get_patients(pid)
-        return HEARTRATE(patient)
+        heart_rate = get_heartrate_data(pid)
+        return HEARTRATE(patient, heart_rate)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)

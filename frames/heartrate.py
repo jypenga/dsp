@@ -8,13 +8,13 @@ from templates.main import Custom
 
 cstm = Custom()
 
-def HEARTRATE(patient):
+def HEARTRATE(patient, heart_rate):
 
     # hier niks aan veranderen
     return [cstm.AppHeader(top_left='Hartslag', top_right='header-icon-heartrate.svg', top_right_id='app-header-icon-transparent'),
 
     # hier relatief weining shit aan toevoegen
-    html.Div([html.H1('Volgens mij zitten de verschillende buttons allemaal op dezelfde plek. Morgen even oplossen met Jorit'), cstm.HrTable(patient)],
+    html.Div([html.H1('Pindakaas'), cstm.HrTable(patient, round(heart_rate.mean()))],
     className='app-body'),
 
     # hier niks aan veranderen

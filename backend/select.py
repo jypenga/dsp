@@ -1,6 +1,8 @@
 import os
 import sqlite3
 
+import numpy as np
+
 from sqlite3 import Error
 from .connect import with_connection
 
@@ -88,3 +90,20 @@ def get_patient_logs(conn, id):
     except Error as e:
         print(e)
     return ret
+
+@with_connection(db=PATH)
+def get_heartrate_data(conn, id): # alleen ff value om te kijken of het gem. werkt
+    sql = """SELECT value FROM heartrate WHERE patient=?;"""
+    ret = []
+    if not id:
+        return ret
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id))
+        ret = c.fetchall()
+    except Error as e:
+        print(e)
+    
+    beter_dan_ret = np.array([x[0] for x in ret])
+
+    return beter_dan_ret
