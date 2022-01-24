@@ -254,19 +254,19 @@ class Custom():
         return content
 
 
-    def HrTable(self, patient):
+    def HrTable(self, patient, mean):
 
         subjects = ['Gem bpm rust', 'Gem bpm actief', 'Fitness level', 'Endurance']
 
         # create block
-        def block(subject):
-            return html.Td(html.Div([subject, html.P('69')], className='app-data-card'))
+        def block(subject, mean=False):
+            return html.Td(html.Div([subject, html.P(mean)], className='app-data-card'))
         
         # create table from blocks
         content = html.Table(
            html.Tbody(
                [html.Tr(html.Td(html.Div(['grafiek', html.P('420')], className='app-main-data-card'), colSpan=2)),
-                html.Tr([block(subjects[0]), block(subjects[1])]),
+                html.Tr([block(subjects[0], mean), block(subjects[1])]),
                 html.Tr([block(subjects[2]), block(subjects[3])])]
            ), className='app-data-table' 
         )
