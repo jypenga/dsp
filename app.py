@@ -193,7 +193,7 @@ def cb_select_patient(ids):
 # dashboard switch callback
 @app.callback(Output('dashboard-body', 'children'), 
               Output('dashboard-button-monitored', 'style'), 
-              Output('dashboard-button-manual', 'style'), 
+              Output('dashboard-button-manual', 'style'),
               Input('dashboard-button-monitored', 'n_clicks'), 
               Input('dashboard-button-manual', 'n_clicks'))
 def cb_switch_dashboard(moitored, manual):
@@ -211,6 +211,7 @@ def cb_switch_dashboard(moitored, manual):
               Output('profile-button-info', 'style'), 
               Output('profile-button-medical', 'style'), 
               Output('profile-button-food', 'style'), 
+              Output({'type':'add-button', 'index': ALL}, 'style'),
               Input('profile-button-info', 'n_clicks'), 
               Input('profile-button-medical', 'n_clicks'),
               Input('profile-button-food', 'n_clicks'))
@@ -219,15 +220,15 @@ def cb_switch_profile(info, medical, food):
     GC_PID = flask.request.cookies.get('pid')
     patient = get_patient(GC_PID)
     if 'info' in trigger:
-        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
     elif 'medical' in trigger:
         medication = get_patient_medication(GC_PID)
-        return cstm.ProfileTableMedical(patient, medication), {}, {'border-bottom': '3px solid #3B72FF'}, {}
+        return cstm.ProfileTableMedical(patient, medication), {}, {'border-bottom': '3px solid #3B72FF'}, {}, [{'display':'block'}]
     elif 'food' in trigger:
         diet = get_patient_diet(GC_PID)
-        return cstm.ProfileTableFood(patient, diet), {}, {}, {'border-bottom': '3px solid #3B72FF'}
+        return cstm.ProfileTableFood(patient, diet), {}, {}, {'border-bottom': '3px solid #3B72FF'}, [{'display':'none'}]
     elif '.' in trigger:
-        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
 
 
 # add new entry buttons wildcard callback
@@ -242,22 +243,18 @@ def cb_switch_profile(info, medical, food):
               State({'type':'entry-input', 'index': ALL}, 'value'))
 def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     trigger = dash.callback_context.triggered[0]['prop_id']
+    print(trigger)
 
-    if dates or inputs:
-        dates = [elem for elem in dates if elem]
-        inputs = [elem for elem in inputs if elem]
-        year, month, day = dates[0].split('-')
-        inputs = [elem for elem in inputs if elem]
-        inputs = inputs + [int(day), int(month), int(year)]
-
+    uid = flask.request.cookies.get('uid')
     pid = flask.request.cookies.get('pid')
     page = []
+
     if trigger == '.':
         raise dash.exceptions.PreventUpdate
     elif 'log' in trigger:
-        patient = get_patient(pid)
-        logs = get_patient_logs(pid)
-        page = (cstm.LogsTable(patient, logs), )
+        page = (cstm.LogsTable(get_patient(pid), get_patient_logs(pid)), )
+    elif 'patients' in trigger:
+        page = (cstm.PatientTable(get_patients(uid)), )
 
     content = [], {}, {}, page
 
@@ -265,6 +262,10 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     if isinstance(n_clicks_add, list) and len(n_clicks_add) > 0 and n_clicks_add[0]:
         if 'log' in trigger:
             content = cstm.NewLogEntry(date.today()), {'display':'block'}, {'opacity': '.5'}, page
+        elif 'medical' in trigger:
+            content = cstm.NewMedicineEntry(), {'display':'block'}, {'opacity': '.5'}, page
+        elif 'patients' in trigger:
+            content = cstm.NewPatient(), {'display':'block'}, {'opacity': '.5'}, page
         elif 'calendar' in trigger:
             print('calendar')
             content = [], {}, {}, page
@@ -274,11 +275,27 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     # save new entry
     if isinstance(n_clicks_save, list) and len(n_clicks_save) > 0 and n_clicks_save[0]:
         if 'log' in trigger:
-            insert_log(pid, inputs)
-            patient = get_patient(pid)
-            logs = get_patient_logs(pid)
-            page = (cstm.LogsTable(patient, logs), )
-            content = cstm.Notification('Log succesvol toegevoegd!'), {'display':'block'}, {'opacity': '1'}, page
+            dates = [elem for elem in dates if elem]
+            inputs = [elem for elem in inputs if elem]
+            year, month, day = dates[0].split('-')
+            inputs = [elem for elem in inputs if elem]
+            inputs = inputs + [int(day), int(month), int(year)]
+            result = insert_log(pid, inputs)
+            page = (cstm.LogsTable(get_patient(pid), get_patient_logs(pid)), )
+            content = cstm.Notification('Log succesvol toegevoegd!', result), {'display':'block'}, {'opacity': '1'}, page
+        elif 'medical' in trigger:
+            inputs = [x[-1] if isinstance(x, list) else x for x in inputs]
+            if inputs[2] == '0':
+                inputs[3] = None
+                inputs[4] = None
+            result = insert_medication(pid, inputs)
+            # TODO: live refresh
+            content = cstm.Notification('Medicatie succesvol toegevoegd!', result), {'display':'block'}, {'opacity': '1'}, []
+        elif 'patients' in trigger:
+            result = insert_patient(uid, inputs)
+            # TODO: live
+            page = (cstm.PatientTable(get_patients(uid)), )
+            content = cstm.Notification('Patient succesvol toegevoegd!', result), {'display':'block'}, {'opacity': '1'}, page
     # standard
     if len(n_clicks_add) != 1 and len(n_clicks_close) != 1 and len(n_clicks_save) != 1:
         content = [], {}, {}, page

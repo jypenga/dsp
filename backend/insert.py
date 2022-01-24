@@ -12,11 +12,39 @@ def insert_log(conn, id, args):
     sql = """INSERT INTO logs (patient, title, extra, day, month, year)
              VALUES
              (?, ?, ?, ?, ?, ?);"""
-    ret = None
+    retcode = 0
     try:
         c = conn.cursor()
         c.execute(sql, (id, *args))
-        # ret = c.fetchall()[0]
+        retcode = 1
     except Error as e:
         print(e)
-    # return ret
+    return retcode
+
+@with_connection(db=PATH)
+def insert_patient(conn, id, args):
+    sql = """INSERT INTO patients (user, name, age, sex, height, weight)
+             VALUES
+             (?, ?, ?, ?, ?, ?);"""
+    retcode = 0
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id, *args))
+        retcode = 1
+    except Error as e:
+        print(e)
+    return retcode
+
+@with_connection(db=PATH)
+def insert_medication(conn, id, args):
+    sql = """INSERT INTO medication (patient, name, type, time_range, time_start, time_end, meal, specific, reason)
+             VALUES
+             (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+    retcode = 0
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id, *args))
+        retcode = 1
+    except Error as e:
+        print(e)
+    return retcode

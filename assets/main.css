@@ -346,11 +346,11 @@ input[type=checkbox] {
 
 /* footer */
 .register-footer {
-  min-height: 8%;
+  min-height: 6%;
   min-width: 100%;
   background-color: #3B72FF;
   bottom: 0;
-  position: absolute;
+  position: fixed;
 }
 
 .app-footer {
@@ -446,6 +446,10 @@ input[type=checkbox] {
   margin-right: 7%;
 }
 
+.new-entry .app-medication-table, .new-entry #app-register-table {
+  margin: 0 !important;
+}
+
 #app-food-table td, #app-medical-table td, .app-medication-table td {
   padding: 20px;
 }
@@ -508,6 +512,7 @@ input[type=checkbox] {
   font-size: 25pt;
   font-weight: 700;
   width: 90%;
+  padding-bottom: 15%;
 }
 
 .app-patient-card {
@@ -709,11 +714,10 @@ h3 {
 }
 
 .new-entry {
-  position: absolute;
+  position: fixed;
   width: 70%;
   z-index: 17;
   background: #FAFAFA;
-  top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(50%);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px -12px;
@@ -762,7 +766,6 @@ h3 {
 
 .new-entry p {
   width: 100%;
-  margin: 0;
   font-size: 25pt;
   color: #171717;
   font-weight: 700;
@@ -771,7 +774,7 @@ h3 {
 
 .new-entry table {
   width: 100%;
-  font-size: 25pt;
+  font-size: 25pt !important;
   color: #171717;
   font-weight: 700;
 }
@@ -802,6 +805,7 @@ h3 {
   width: 100%;
   border: none;
   padding: 11px 11px 9px;
+  background: white !important;
 }
 
 .new-entry .log-entry-table img {

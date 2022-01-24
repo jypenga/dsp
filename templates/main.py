@@ -88,8 +88,10 @@ class Custom():
         return content
 
     
-    def Notification(self, contents, index=0):
-        content = html.Div([html.Table(html.Tbody(html.Tr([html.Td(html.Img(src=self.app.get_asset_url('notification-icon-success.svg'))), html.Td(html.P(contents))]))), 
+    def Notification(self, contents, result, index=0):
+        src = self.app.get_asset_url('notification-icon-success.svg') if result else self.app.get_asset_url('notification-icon-failure.svg')
+        contents = contents if result else 'Actie mislukt!'
+        content = html.Div([html.Table(html.Tbody(html.Tr([html.Td(html.Img(src=src)), html.Td(html.P(contents))]))), 
         html.Button('x', id={'type':'close-notification-button', 'index':str(index)})], id={'type':'notification', 'index':str(index)}, className='notification') 
         return content
 
@@ -115,6 +117,8 @@ class Custom():
         content = html.Table(html.Tbody([*[html.Tr([PatientCard(duo[0]), PatientCard(duo[1])]) for duo in patients], 
                                            html.Tr(PatientCard(tmp) if tmp else [])]), 
                                             id='app-patient-table')
+
+        content = [html.H2('Jouw patienten'), content]
         return content
 
 
@@ -200,11 +204,25 @@ class Custom():
 
 
     def ChecklistTable(self):
-        return []
+        content = []
+        return content
+
+
+    def NewPatient(self):
+        content = html.Div([html.H3('NIEUWE PATIENT'), html.P("Verdere patientgegevens kunnen worden ingevuld in het profiel."),
+        html.Table(html.Tbody([html.Tr([html.Td('Naam'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'name'}, type='text'))]),
+                html.Tr([html.Td('Leeftijd'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'age'}, type='number'))]),
+                html.Tr([html.Td('Geslacht'), html.Td(dcc.Dropdown(id={'type':'entry-input', 'index':'sex'}, options=[{'label':'man', 'value':'m'}, {'label':'vrouw', 'value':'v'}, {'label':'anders', 'value':'a'}], placeholder='', clearable=False))]),
+                html.Tr([html.Td('Lengte'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'height'}, type='number'))]),
+                html.Tr([html.Td('Gewicht'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'weight'}, type='number'))]),
+                ]), id='app-register-table'), 
+                html.Button('x', id={'type':'close-entry-button', 'index':'patients'}, className='close-entry-button'),
+                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'patients'}, className='save-entry-button')], className='new-entry')
+        return content
 
 
     def NewLogEntry(self, date):
-        content = html.Div([html.H3('NIEUWE LOG'), html.P("Naast de gemonitorde gezondheid op die dag, kun je hier zelf de stemming en andere bijzonderheden bijhouden. Dit kan belangrijk zijn om verandering over tijd vast te leggen."),
+        content = html.Div([html.H3('NIEUWE LOG'), html.P("yes yes"),
         html.Table(html.Tbody([html.Tr([html.Td('Titel'), html.Td(dcc.Input(type='text', id={'type':'entry-input', 'index':'title'}), colSpan=3)]),
                                html.Tr([html.Td('Datum'), html.Td(dcc.DatePickerSingle(max_date_allowed=date, display_format='D-M-Y', date=date, id={'type':'entry-input', 'index':'date'}), colSpan=3)]), 
                                html.Tr([html.Td('Gezondheid'), html.Td(html.Img(src=self.app.get_asset_url('smiley-negative.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-neutral.svg'))), html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg')))]),
@@ -214,6 +232,25 @@ class Custom():
                                ]), className='log-entry-table'), 
                                html.Button('x', id={'type':'close-entry-button', 'index':'log'}, className='close-entry-button'),
                                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'log'}, className='save-entry-button')], className='new-entry')
+        return content
+
+
+    def NewMedicineEntry(self):
+        content = html.Div([html.H3('NIEUWE MEDICATIE'), html.P(""),
+        html.Table(html.Tbody([html.Tr([html.Td('Naam medicatie'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'name'}, type='text'), colSpan=4)]),
+                html.Tr([html.Td('Vorm medicatie'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'type'}, type='text'), colSpan=4)]),
+                html.Tr([html.Td('Tijd inname'), html.Td(dcc.Checklist(options=[{'label':'', 'value':'1'}], id={'type':'entry-input', 'index':'time_range'})), html.Td(dcc.Input(id={'type':'entry-input', 'index':'time_start'}, type='text')), html.Td('↔'), html.Td(dcc.Input(id={'type':'entry-input', 'index':'time_end'}, type='text'))]),
+                html.Tr([html.Td('Maaltijd'), html.Td(dcc.Dropdown(options=[{'label':'Geen', 'value':'0'}, 
+                                                                            {'label':'Ontbijt', 'value':'1'}, 
+                                                                            {'label':'Lunch', 'value':'2'},
+                                                                            {'label':'Diner', 'value':'3'}], value='0', id={'type':'entry-input', 'index':'meal'}), colSpan=4)]),
+                html.Tr([html.Td(dcc.Checklist(options=[{'label':'Voor', 'value':'1'}, 
+                                                        {'label':'Tijdens', 'value':'2'}, 
+                                                        {'label':'Na', 'value':'3'}], labelStyle={'display': 'inline-block'
+                                                        }, id={'type':'entry-input', 'index':'specific'}), colSpan=5)]),
+                html.Tr([html.Td('Reden'), html.Td(dcc.Textarea(id={'type':'entry-input', 'index':'reason'}), colSpan=4)])]), className='app-medication-table'),
+                html.Button('x', id={'type':'close-entry-button', 'index':'medical'}, className='close-entry-button'),
+                html.Button('Opslaan', id={'type':'save-entry-button', 'index':'medical'}, className='save-entry-button')], className='new-entry')
         return content
 
 
@@ -233,7 +270,6 @@ class Custom():
                 html.Tr([block(subjects[2]), block(subjects[3])])]
            ), className='app-data-table' 
         )
-
 
         return content
 

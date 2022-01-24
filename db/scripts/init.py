@@ -50,8 +50,8 @@ if __name__ == '__main__':
                                    sex text NOT NULL,
                                    height real NOT NULL,
                                    weight real NOT NULL,
-                                   avatar text NOT NULL,
-                                   score real NOT NULL,
+                                   avatar text,
+                                   score real,
                                    doctor text,
                                    doctor_phone text,
                                    provider text,
@@ -63,10 +63,10 @@ if __name__ == '__main__':
                                 name text NOT NULL,
                                 type text NOT NULL,
                                 time_range integer NOT NULL,
-                                time_start text NOT NULL,
-                                time_end text NOT NULL,
+                                time_start text,
+                                time_end text,
                                 meal integer NOT NULL,
-                                specific integer NOT NULL,
+                                specific integer,
                                 reason text); """
 
     sql_create_diet_table = """CREATE TABLE IF NOT EXISTS diet (
@@ -110,8 +110,8 @@ if __name__ == '__main__':
                                 (1, "Taylor Swift", 40, "v", 1.80, 55.3, "avatar-f.png", 0),
                                 (2, "Kevin Kevin", 55, "m", 1.50, 70.8, "avatar-f.png", 0),
                                 (2, "Chris Evans", 1, "m", 1.80, 90.6, "avatar-m.png", 0),
-                                (2, "Anouk Hooijschuur", 2, "v", 1.70, "avatar-f.png", 60.4, 0),
-                                (2, "Vera Verbanescu", 42, "v", 1.76, "avatar-f.png", 70.9, 0);"""
+                                (2, "Anouk Hooijschuur", 2, "v", 1.70, 60.4, "avatar-f.png", 0),
+                                (2, "Vera Verbanescu", 42, "v", 1.76, 70.9, "avatar-f.png", 0);"""
 
     sql_insert_dummy_logs = """INSERT INTO logs (patient, title, day, month, year, health, mood, extra)
                              VALUES
