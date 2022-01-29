@@ -127,7 +127,7 @@ a {
 
 /* app header */
 .app-header {
-  min-height: 33%;
+  min-height: 32%;
   min-width: 100%;
   background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, white 70%);
   position: fixed;
@@ -267,7 +267,7 @@ a {
 /* body */
 .app-body {
   position: absolute;
-  top: 35%;
+  top: 32.5%;
   color:#2A547E;
   min-width: inherit;
   min-height: auto;
@@ -591,6 +591,7 @@ input[type=checkbox] {
   font-size: 25pt;
   font-weight: 700;
   width: 90%;
+  margin-top: 3%;
 }
 
 .dashboard-table td {
@@ -694,6 +695,10 @@ h3 {
 
 .dashboard-subheader #profile-button-food {
   width: 33%;
+}
+
+#profile-body {
+  margin-top: 8%;
 }
 
 #profile-body h3 {
@@ -844,4 +849,54 @@ h3 {
   width: 90%;
   margin: 2.5%;
   margin-top: -5.5%;
+}
+
+.blood-pressure-fig {
+  width: 95%;
+  padding: 2.5%;
+}
+
+.data-body {
+  margin-top: -5%;
+}
+
+.data-body h3 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.data-body h4 {
+  float: right;
+  margin-right: 2.5%;
+}
+
+.data-fig-header {
+  padding-left: 2.5%;
+  font-size: 22pt;
+  color: gray;
+}
+
+.data-fig-header-top {
+  padding-left: 2.5%;
+  font-size: 22pt;
+  color: gray;
+  float: left;
+}
+
+.data-fig-header img, .data-fig-header-top img {
+  width: 22px;
+  padding-left: 40%;
+}
+
+.data-fig-previous {
+  padding-left: 2.5%;
+  font-size: 22pt;
+  color: gray;
+  float: left;
+}
+.data-fig-next {
+  padding-right: 2.5%;
+  font-size: 22pt;
+  color: gray;
+  float: right;
 }

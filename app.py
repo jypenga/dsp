@@ -27,6 +27,7 @@ from frames.calendar import CALENDAR
 from frames.checklist import CHECKLIST
 from frames.log import LOGS
 from frames.heartrate import HEARTRATE
+from frames.bloodpressure import BLOODPRESSURE
 
 # import backend funcs
 from backend.register import register
@@ -98,6 +99,10 @@ def display_page(path_1):
         patient = get_patients(pid)
         heart_rate = get_heartrate_data(pid)
         return HEARTRATE(patient, heart_rate)
+    elif check_path('/bloeddruk') and uid and pid:
+        patient = get_patients(pid)
+        blood_pressure = None # TODO: db connection
+        return BLOODPRESSURE(patient, blood_pressure)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)
@@ -244,7 +249,6 @@ def cb_switch_profile(info, medical, food):
               State({'type':'entry-input', 'index': ALL}, 'value'))
 def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     trigger = dash.callback_context.triggered[0]['prop_id']
-    print(trigger)
 
     uid = flask.request.cookies.get('uid')
     pid = flask.request.cookies.get('pid')

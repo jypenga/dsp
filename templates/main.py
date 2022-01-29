@@ -3,6 +3,10 @@ import dash
 from dash import dcc
 from dash import html
 
+import base64
+import svgwrite
+import numpy as np
+
 
 class Custom():
     def __init__(self):
@@ -46,7 +50,7 @@ class Custom():
         return content
 
 
-    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False):
+    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False, additional_className=''):
         if dashboard:
             subheader = html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
@@ -71,7 +75,7 @@ class Custom():
                         html.P(middle_sub)], 
                         className='app-header-text-middle'),
                     subheader,
-                ], className='app-header', style=shadow)
+                ], className='app-header' + additional_className, style=shadow)
         return content
 
 
@@ -276,3 +280,127 @@ class Custom():
 
     def Calendar(self):
         return html.Img(src=self.app.get_asset_url('calendar.svg'))
+
+
+    def DataTable(self, hist, graph):
+
+        subjects = ['Gem bpm rust', 'Gem bpm actief', 'Fitness level', 'Endurance']
+
+        def block(subject, mean=False):
+            return html.Td(html.Div([html.Div([html.P(mean),html.P(mean)]), html.P(mean), html.P('ya')], className='app-data-card'))
+            
+            # #html.Table(html.Tbody([html.Tr([html.Td('Gemiddeld'), html.Td('Hoog')]),
+            #                              html.Tr([html.Td('yas', colSpan=2)]),
+            #                              html.Tr([html.Td('yas', colSpan=2)])]), className='app-data-card')
+        
+        content = [html.H3('STATISTIEKEN'),
+        html.Table(
+           html.Tbody(
+               [html.Tr(html.Td(html.Div([html.H4('Maart'), *hist, *graph], className='app-main-data-card'), colSpan=2)),
+                html.Tr([block(subjects[0], 0), block(subjects[1])]),
+                html.Tr([block(subjects[2]), block(subjects[3])])]
+           ), className='app-data-table' 
+        )]
+
+        return content
+
+
+    def BloodPressureHist(self):
+        HEIGHT = 350
+        WIDTH = 980
+        
+        uppers = np.random.randint(100, 200, size=30)
+        lowers = np.random.randint(60, 120, size=30)
+
+        drawing = svgwrite.Drawing(size=(WIDTH, HEIGHT), filename='assets/test.svg')
+
+        n = 7
+        spacing = 5
+        bar_width = 30
+
+        graph_height = HEIGHT - 40
+        graph_width = WIDTH - 40
+
+        upper_subset = uppers[:-n]
+        lower_subset = lowers[:-n]
+
+        scaling_factor = graph_height / np.max(np.hstack((upper_subset, lower_subset)))
+
+        for i, (x, upper, lower) in enumerate(zip(np.linspace(20, graph_width - (bar_width * 2 + 5), num=n), upper_subset, lower_subset)):
+
+            if i < n - 1:
+                a = .5
+            else:
+                a = 1
+            
+            upper_bar_height = int(np.floor(graph_height - upper * scaling_factor))
+            lower_bar_height = int(np.floor(graph_height - lower * scaling_factor))
+            
+            drawing.add(drawing.polygon([(x, upper_bar_height), (x + bar_width, upper_bar_height), (x+bar_width, graph_height), (x, graph_height)], fill='#FFCD4B', opacity=a))
+            drawing.add(drawing.polygon([(x + bar_width + spacing, lower_bar_height), (x + bar_width*2 + spacing, lower_bar_height), (x+bar_width*2 +spacing, graph_height), (x + bar_width + spacing, graph_height)], fill='#FFCD4B', opacity=a))
+
+            if i in [0, 3]:  
+                drawing.add(drawing.text(f'{29 - n +  i}/01', (x - 5, HEIGHT), font_size='25pt', font_family='sans-serif', opacity=.5))
+            if i in [6]:
+                drawing.add(drawing.text(f'{29 - n +  i}/01', (x - 5, HEIGHT), font_size='25pt', font_family='sans-serif', font_weight='bold', opacity=.5))
+
+        drawing.save()
+
+        encoded = base64.b64encode(open('assets/test.svg','rb').read()) 
+        svg = 'data:image/svg+xml;base64,{}'.format(encoded.decode()) 
+        
+        return [html.Img(src=svg, className='blood-pressure-fig')]
+
+
+    def BloodPressureGraph(self):
+        HEIGHT = 350
+        WIDTH = 980
+        
+        uppers = np.random.randint(100, 200, size=30)
+        lowers = np.random.randint(60, 120, size=30)
+
+        max_height = np.max(np.hstack((uppers, lowers)))
+
+        drawing = svgwrite.Drawing(size=(WIDTH, HEIGHT), filename='assets/test.svg')
+        drawing.add(drawing.rect((0, 0), (WIDTH, HEIGHT), rx=40, ry=40, stroke='#FFCD4B', fill='#FFCD4B', opacity=.17))
+
+        gradient = svgwrite.gradients.LinearGradient(start=('0%', '100%'), end=('0%', '0%'), id='Gradient')
+        gradient.add_stop_color(offset=0, color='#FFCD4B', opacity=0.17)
+        gradient.add_stop_color(offset=1, color='#FFCD4B', opacity=0.83)
+        drawing.add(gradient)
+
+        xs = np.linspace(0, WIDTH, num=len(uppers))
+
+        drawing.add(drawing.polygon([(0, HEIGHT)] + [(int(x), HEIGHT - int(upper)) for x, upper in zip(xs, uppers)] + [(WIDTH, HEIGHT)], fill=gradient.get_paint_server()))
+        drawing.add(drawing.polyline([(int(x), HEIGHT - int(upper)) for x, upper in zip(xs, uppers)], stroke='white', stroke_width=7, fill='none'))
+
+        drawing.save()
+
+        encoded = base64.b64encode(open('assets/test.svg','rb').read()) 
+        svg_upper = 'data:image/svg+xml;base64,{}'.format(encoded.decode())
+
+        drawing = svgwrite.Drawing(size=(WIDTH, HEIGHT), filename='assets/test.svg')
+        drawing.add(drawing.rect((0, 0), (WIDTH, HEIGHT), rx=40, ry=40, stroke='#FFCD4B', fill='#FFCD4B', opacity=.17))
+
+        gradient = svgwrite.gradients.LinearGradient(start=('0%', '100%'), end=('0%', '0%'), id='Gradient')
+        gradient.add_stop_color(offset=0, color='#FFCD4B', opacity=0.17)
+        gradient.add_stop_color(offset=1, color='#FFCD4B', opacity=0.83)
+        drawing.add(gradient)
+
+        xs = np.linspace(0, WIDTH, num=len(uppers))
+
+        drawing.add(drawing.polygon([(0, HEIGHT)] + [(int(x), HEIGHT - int(lower)) for x, lower in zip(xs, lowers)] + [(WIDTH, HEIGHT)], fill=gradient.get_paint_server()))
+        drawing.add(drawing.polyline([(int(x), HEIGHT - int(lower)) for x, lower in zip(xs, lowers)], stroke='white', stroke_width=7, fill='none'))
+
+        drawing.save()
+
+        encoded = base64.b64encode(open('assets/test.svg','rb').read()) 
+        svg_lower = 'data:image/svg+xml;base64,{}'.format(encoded.decode())
+        
+        return [html.Table(html.Tbody(html.Tr([html.Td('Per maand'), html.Td(html.Img(src=self.app.get_asset_url(f'icon-edit.svg')))])), className='data-fig-header'), 
+        html.Img(src=svg_upper, className='blood-pressure-fig'), 
+        html.Table(html.Tbody(html.Tr([html.Td('Per maand'), html.Td(html.Img(src=self.app.get_asset_url(f'icon-edit.svg')))])), className='data-fig-header'), 
+        html.Img(src=svg_lower, className='blood-pressure-fig'),
+        html.Table(html.Tbody(html.Tr([html.Td('< Vorige')])), className='data-fig-previous'), 
+        html.Table(html.Tbody(html.Tr([html.Td('Volgende >')])), className='data-fig-next'), 
+        ]
