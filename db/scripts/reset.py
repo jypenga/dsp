@@ -32,7 +32,8 @@ if __name__ == '__main__':
     sql_delete_logs = """DROP TABLE logs;"""
 
     # takes a LONG time to fill, uncomment with caution
-    sql_delete_heartrate = """DROP TABLE heartrate;"""
+    # sql_delete_heartrate = """DROP TABLE heartrate;"""
+    sql_delete_data = """DROP TABLE data;"""
 
     conn = create_connection(db)
 
@@ -44,7 +45,8 @@ if __name__ == '__main__':
             delete_all(conn, sql_delete_medication)
             delete_all(conn, sql_delete_diet)
             delete_all(conn, sql_delete_logs)
-            delete_all(conn, sql_delete_heartrate)
+            # delete_all(conn, sql_delete_heartrate)
+            delete_all(conn, sql_delete_data)
         else:
             print("Error! cannot create the database connection.")
         print('Database succesfully reset.')

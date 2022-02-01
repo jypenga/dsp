@@ -13,6 +13,15 @@ class Custom():
         self.app = dash.Dash(__name__)
 
 
+    def Smiley(self, score):
+        if score == 3:
+            return self.app.get_asset_url('smiley-positive.svg')
+        elif score == 2:
+            return self.app.get_asset_url('smiley-neutral.svg')
+        else:
+            return self.app.get_asset_url('smiley-negative.svg')
+
+
     def RegisterHeader(self):
         content = html.Div([
                     html.Div([], 
@@ -103,8 +112,10 @@ class Custom():
         return content
 
     
-    def PatientTable(self, patients):
+    def PatientTable(self, patients, scores):
         # group by 2
+        patients = [(*patient, score) for patient, score in zip(patients, scores)]
+
         tmp = None
         if len(patients) % 2 == 0:
             patients = list(zip(patients, patients[1:]))[::2]
@@ -116,7 +127,7 @@ class Custom():
         # create card
         def PatientCard(patient):
             avatar = 'avatar-m.png' if patient[4] == 'm' else 'avatar-f.png'
-            return html.Td(html.Button(html.Div([html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='patient-card-smiley-score'),
+            return html.Td(html.Button(html.Div([html.Img(src=self.Smiley(patient[-1]), className='patient-card-smiley-score'),
                                     html.Img(src=self.app.get_asset_url(avatar)), 
                                     patient[2]], className='app-patient-card'), id={'type':'app-patient-card', 'index':patient[0]}))
 

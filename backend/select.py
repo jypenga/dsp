@@ -92,18 +92,19 @@ def get_patient_logs(conn, id):
     return ret
 
 @with_connection(db=PATH)
-def get_heartrate_data(conn, id): # alleen ff value om te kijken of het gem. werkt
-    sql = """SELECT value FROM heartrate WHERE patient=?;"""
+def get_patient_score(conn, id):
+    sql = """SELECT score FROM data WHERE patient=? ORDER BY id DESC;"""
     ret = []
     if not id:
         return ret
     try:
         c = conn.cursor()
-        c.execute(sql, (id))
+        c.execute(sql, (id, ))
         ret = c.fetchall()
+        if len(ret) > 0:
+            ret = ret[0][0]
+        else:
+            ret = 3
     except Error as e:
         print(e)
-    
-    beter_dan_ret = np.array([x[0] for x in ret])
-
-    return beter_dan_ret
+    return ret

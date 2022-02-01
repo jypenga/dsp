@@ -76,9 +76,12 @@ def display_page(path_1):
     elif check_path('/patienten') and uid:
         name = get_name(uid)
         patients = get_patients(uid)
-        return PATIENTS(name, patients)
+        pids = [patient[0] for patient in patients]
+        scores = [get_patient_score(pid) for pid in pids]
+        return PATIENTS(name, patients, scores)
     elif check_path('/dashboard') and uid and pid:
         patient = get_patient(pid)
+        print(get_patient_score(pid))
         return DASHBOARD(today, patient)
     elif check_path('/agenda') and uid and pid:
         patient = get_patient(pid)
@@ -97,7 +100,8 @@ def display_page(path_1):
         return LOGS(today, patient, logs)
     elif check_path('/hartslag') and uid and pid:
         patient = get_patients(pid)
-        heart_rate = get_heartrate_data(pid)
+        # heart_rate = get_heartrate_data(pid)
+        heart_rate = None
         return HEARTRATE(patient, heart_rate)
     elif check_path('/bloeddruk') and uid and pid:
         patient = get_patients(pid)
@@ -284,7 +288,11 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
     elif 'log' in trigger:
         page = (cstm.LogsTable(get_patient(pid), get_patient_logs(pid)), )
     elif 'patients' in trigger:
-        page = (cstm.PatientTable(get_patients(uid)), )
+        patients = get_patients(uid)
+        pids = [patient[0] for patient in patients]
+        scores = [get_patient_score(pid) for pid in pids]
+        print(scores)
+        page = (cstm.PatientTable(patients, scores), )
 
     content = [], {}, {}, page
 
@@ -297,7 +305,6 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
         elif 'patients' in trigger:
             content = cstm.NewPatient(), {'display':'block'}, {'opacity': '.5'}, page
         elif 'calendar' in trigger:
-            print('calendar')
             content = [], {}, {}, page
     # close (cancel) new entry
     if isinstance(n_clicks_close, list) and len(n_clicks_close) > 0 and n_clicks_close[0]:
@@ -324,7 +331,7 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
         elif 'patients' in trigger:
             result = insert_patient(uid, inputs)
             # TODO: live
-            page = (cstm.PatientTable(get_patients(uid)), )
+            page = (cstm.PatientTable(get_patients(uid), scores), )
             content = cstm.Notification('Patient succesvol toegevoegd!', result), {'display':'block'}, {'opacity': '1'}, page
     # standard
     if len(n_clicks_add) != 1 and len(n_clicks_close) != 1 and len(n_clicks_save) != 1:

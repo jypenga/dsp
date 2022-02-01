@@ -189,14 +189,14 @@ def do(conn, sql, *args):
         print(e)
 
 # load df
-def load(df, pid):
-    query = """INSERT INTO data (patient, month, day, year, hour, minute, steps, heartrate, sleep, bp_upper, bp_lower, score)
+def load_data(df, pid):
+    query = """INSERT INTO data (patient, date, month, day, year, hour, minute, steps, heartrate, sleep, bp_upper, bp_lower, score)
                 VALUES
                 """
-        
-    for index, row in df.iterrows():
-        # do(conn, sql_insert_dummy_heartrate, *row)
-        query += """({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})""".format(pid, *row)
+    
+    index = 0
+    for _, row in df.iterrows():
+        query += """({}, "{}", {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})""".format(pid, *row)
 
         if index != len(df) - 1:
             query += """,
@@ -204,7 +204,8 @@ def load(df, pid):
         else:
             query += """;"""
             break
-
+    
+        index += 1
     do(conn, query)
 
 
@@ -279,7 +280,7 @@ if __name__ == '__main__':
     sql_create_data_table = """CREATE TABLE IF NOT EXISTS data (
                               id integer PRIMARY KEY AUTOINCREMENT,
                               patient integer NOT NULL,
-                              data text NOT NULL,
+                              date text NOT NULL,
                               month integer NOT NULL,
                               day integer NOT NULL,
                               year integer NOT NULL,
@@ -302,11 +303,12 @@ if __name__ == '__main__':
                                 VALUES
                                 (1, "Harry Houdini", 63, "m", 1.80, 80.8, "avatar-m.png", 0),
                                 (1, "Ritish Changoer", 1, "m", 1.60, 200.1, "avatar-m.png", 0),
-                                (1, "Taylor Swift", 40, "v", 1.80, 55.3, "avatar-f.png", 0),
                                 (2, "Kevin Kevin", 55, "m", 1.50, 70.8, "avatar-f.png", 0),
                                 (2, "Chris Evans", 1, "m", 1.80, 90.6, "avatar-m.png", 0),
                                 (2, "Anouk Hooijschuur", 2, "v", 1.70, 60.4, "avatar-f.png", 0),
                                 (2, "Vera Verbanescu", 42, "v", 1.76, 70.9, "avatar-f.png", 0);"""
+
+#(1, "Taylor Swift", 40, "v", 1.80, 55.3, "avatar-f.png", 0),
 
     sql_insert_dummy_logs = """INSERT INTO logs (patient, title, day, month, year, health, mood, extra)
                              VALUES
@@ -330,6 +332,7 @@ if __name__ == '__main__':
         create_table(conn, sql_create_medication_table)
         create_table(conn, sql_create_diet_table)
         create_table(conn, sql_create_log_table)
+        create_table(conn, sql_create_data_table)
 
         hashed_pw_1 = bcrypt.hashpw(bytes('admin', encoding='utf-8'), bcrypt.gensalt())
         hashed_pw_2 = bcrypt.hashpw(bytes('abc', encoding='utf-8'), bcrypt.gensalt())
@@ -341,10 +344,10 @@ if __name__ == '__main__':
         do(conn, sql_insert_dummy_logs)
 
         data_a = load_all_csv(pid=5553957443)
-        data_b = load_all_csv(pid=6962181067)
+        load_data(data_a, 1)
 
-        load(data_a, 1)
-        load(data_b, 2)
+        data_b = load_all_csv(pid=6962181067)
+        load_data(data_b, 2)
     else:
         print("Error! cannot create the database connection.")
 
