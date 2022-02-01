@@ -585,9 +585,11 @@ input[type=checkbox] {
 }
 
 .dashboard-table {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  /* position: absolute; */
+  /* left: 50%;
+  transform: translateX(-50%); */
+  /* display: block; */
+  margin-left: 5%;
   font-size: 25pt;
   font-weight: 700;
   width: 90%;
@@ -599,11 +601,34 @@ input[type=checkbox] {
 }
 
 .dashboard-table .dashboard-card-icon {
-  min-width: 170px;
+  min-width: 180px;
+}
+
+.dashboard-table .checklist-card-icon {
+  min-width: 180px;
 }
 
 .dashboard-table .dashboard-card-text {
   width: 40%;
+}
+
+.dashboard-table .checklist-card-text {
+  width: 40%;
+}
+
+.dashboard-table .checklist-checkbox {
+  width: 25%;
+}
+
+.dashboard-table .checklist-checkbox p {
+  text-align: right;
+  margin-right: 15%;
+}
+
+.dashboard-table .checklist-checkbox input {
+  zoom: 4.5;
+  margin: 15%;
+  float: right;
 }
 
 .dashboard-table tr {
@@ -685,23 +710,19 @@ h3 {
   width: 40%;
 }
 
-.dashboard-subheader #profile-button-info {
+.dashboard-subheader #profile-button-info, .dashboard-subheader #profile-button-medical, .dashboard-subheader #profile-button-food {
   width: 33%;
 }
 
-.dashboard-subheader #profile-button-medical {
+.dashboard-subheader #checklist-button-info, .dashboard-subheader #checklist-button-medical, .dashboard-subheader #checklist-button-food{ 
   width: 33%;
 }
 
-.dashboard-subheader #profile-button-food {
-  width: 33%;
-}
-
-#profile-body {
+#profile-body, #checklist-body {
   margin-top: 8%;
 }
 
-#profile-body h3 {
+#profile-body h3, #checklist-body h3 {
   text-align: center;
 }
 

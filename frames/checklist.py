@@ -9,7 +9,7 @@ from templates.main import Custom
 cstm = Custom()
 
 def CHECKLIST(date, patient):
-    return [cstm.AppHeader(middle='5', middle_sub='To Do', top_left='Checklist', top_left_sub=date, top_right='header-icon-checklist.svg', top_right_id='app-header-icon'),
+    return [cstm.AppHeader(middle='5', middle_sub='To Do', top_left='Checklist', top_left_sub=date, top_right='header-icon-checklist.svg', top_right_id='app-header-icon', checklist=True),
     html.Div(html.Div([], id='checklist-body'),
     className='app-body'),
     cstm.AppFooter(buttons=True)]

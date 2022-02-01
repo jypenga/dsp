@@ -50,12 +50,15 @@ class Custom():
         return content
 
 
-    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False, additional_className=''):
+    def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False, checklist=False):
         if dashboard:
             subheader = html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
         elif profile:
             subheader = html.Div([html.Button(html.H3('INFO'), id='profile-button-info', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('MEDISCH'), id='profile-button-medical'), html.Button(html.H3('VOEDING'), id='profile-button-food')], className='dashboard-subheader')
+            shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
+        elif checklist:
+            subheader = html.Div([html.Button(html.H3('MEDICATIE'), id='checklist-button-medical', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('VOEDING'), id='checklist-button-food'), html.Button(html.H3('ONTWIKKELING'), id='checklist-button-development')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
         else:
             subheader = None
@@ -75,7 +78,7 @@ class Custom():
                         html.P(middle_sub)], 
                         className='app-header-text-middle'),
                     subheader,
-                ], className='app-header' + additional_className, style=shadow)
+                ], className='app-header', style=shadow)
         return content
 
 
@@ -296,7 +299,7 @@ class Custom():
         content = [html.H3('STATISTIEKEN'),
         html.Table(
            html.Tbody(
-               [html.Tr(html.Td(html.Div([html.H4('Maart'), *hist, *graph], className='app-main-data-card'), colSpan=2)),
+               [html.Tr(html.Td(html.Div([html.H4('Januari'), *hist, *graph], className='app-main-data-card'), colSpan=2)),
                 html.Tr([block(subjects[0], 0), block(subjects[1])]),
                 html.Tr([block(subjects[2]), block(subjects[3])])]
            ), className='app-data-table' 
@@ -404,3 +407,57 @@ class Custom():
         html.Table(html.Tbody(html.Tr([html.Td('< Vorige')])), className='data-fig-previous'), 
         html.Table(html.Tbody(html.Tr([html.Td('Volgende >')])), className='data-fig-next'), 
         ]
+
+    def ChecklistTableMedication(self, medication):
+        def Icon(type):
+            if 'inject' in type.lower():
+                return 'checklist-icon-injection'
+            else:
+                return 'checklist-icon-pills'
+
+        medication = sorted(medication, key=lambda x: int(x[5].split(':')[0]))
+        color = '#ecfaff'
+        names = [med[2] for med in medication]
+        totals = {name:names.count(name) for name in set(names)}
+    
+        medtable = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'{Icon(med[3])}.svg'), className='dashboard-icon'), className='checklist-card-icon'), 
+                                                  html.Td([html.H2(med[2]), html.P(f'{0}/{totals[med[2]]}')], className='checklist-card-text'), 
+                                                  html.Td([html.P(f'{med[5]}-{med[6]}'), dcc.Checklist(options=[{'label':'', 'value':'1'}], id={'type':'checklist-input', 'index':f'{med[2]}-{med[5]}-{med[6]}'})], className='checklist-checkbox')], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {color} 70%, transparent 70%)'}) for med in medication]),
+                                                  className='dashboard-table')
+
+        return [html.H3('DAGELIJKSE MEDICATIE'), medtable]
+
+
+    def ChecklistTableFood(self, diet):
+        color = '#ecfaff'
+        bools = [diet[2], diet[5], diet[8]]
+        icons = [f'checklist-icon-{name}' for name in ['breakfast', 'lunch', 'dinner']]
+        times = [[diet[3], diet[4]], [diet[6], diet[7]], [diet[9], diet[10]]]
+        names = ['Ontbijt', 'Lunch', 'Diner']
+
+        diettable = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'{icons[i]}.svg'), className='dashboard-icon'), className='checklist-card-icon'), 
+                                                  html.Td([html.H2(names[i])], className='checklist-card-text'), 
+                                                  html.Td([html.P(f'{times[i][0]}-{times[i][1]}'), dcc.Checklist(options=[{'label':'', 'value':'1'}], id={'type':'checklist-input', 'index':f'{names[i]}'})], className='checklist-checkbox')], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {color} 70%, transparent 70%)'}) for i in range(3) if bools[i]]),
+                                                  className='dashboard-table')
+        return [html.H3('DAGELIJKSE VOEDING'), diettable]
+
+
+    def ChecklistTableDevelopment(self):
+        colors = ['#ecfaff', '#ecfaff']
+        h3s = ['DAGELIJKSE BEWEGING', 'DAGELIJKS CONTACT']
+        names = [['walking', 'stretching'], ['walking', 'stretching']]
+        titles =  [['Rondje lopen', 'Rek oefeningen'], ['Telefoongesprek', 'Gesprek']]
+        subtexts = [['5 minuten', '10 minuten'], ['min. 2 minuten', 'min. 2 minuten']]
+
+        devtable = [(html.H3(h3s[i]), html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'checklist-icon-{names[i][j]}.svg'), className='dashboard-icon'), className='checklist-card-icon'), 
+                                                  html.Td([html.H2(titles[i][j]), html.P(subtexts[i][j])], className='checklist-card-text'), 
+                                                  html.Td([dcc.Checklist(options=[{'label':'', 'value':'1'}])], className='checklist-checkbox')], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'})
+                                                  for j in range(len(names[i]))]),
+                                                  className='dashboard-table')) for i in range(len(h3s))]
+
+        content = []
+
+        for h3, cards in devtable:
+            content += [h3]
+            content += [cards]
+        return content

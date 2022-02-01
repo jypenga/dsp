@@ -237,6 +237,31 @@ def cb_switch_profile(info, medical, food):
         return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
 
 
+# checklist switch callback
+@app.callback(Output('checklist-body', 'children'), 
+              Output('checklist-button-medical', 'style'), 
+              Output('checklist-button-food', 'style'), 
+              Output('checklist-button-development', 'style'), 
+              Input('checklist-button-medical', 'n_clicks'),
+              Input('checklist-button-food', 'n_clicks'),
+              Input('checklist-button-development', 'n_clicks'))
+def cb_switch_profile(info, medical, food):
+    trigger = dash.callback_context.triggered[0]['prop_id']
+    GC_PID = flask.request.cookies.get('pid')
+    patient = get_patient(GC_PID)
+    if 'development' in trigger:
+        return cstm.ChecklistTableDevelopment(), {}, {}, {'border-bottom': '3px solid #3B72FF'}
+    elif 'medical' in trigger:
+        medication = get_patient_medication(GC_PID)
+        return cstm.ChecklistTableMedication(medication), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+    elif 'food' in trigger:
+        diet = get_patient_diet(GC_PID)
+        return cstm.ChecklistTableFood(diet), {}, {'border-bottom': '3px solid #3B72FF'}, {}
+    elif '.' in trigger:
+        medication = get_patient_medication(GC_PID)
+        return cstm.ChecklistTableMedication(medication), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+
+
 # add new entry buttons wildcard callback
 @app.callback(Output('app-entry-placeholder-1', 'children'),
               Output('app-entry-placeholder-1', 'style'),
