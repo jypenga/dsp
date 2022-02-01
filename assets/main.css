@@ -585,15 +585,17 @@ input[type=checkbox] {
 }
 
 .dashboard-table {
-  /* position: absolute; */
-  /* left: 50%;
-  transform: translateX(-50%); */
-  /* display: block; */
   margin-left: 5%;
   font-size: 25pt;
   font-weight: 700;
   width: 90%;
   margin-top: 3%;
+}
+
+.dashboard-table a {
+  position: relative;
+  transform: none;
+  left: auto;
 }
 
 .dashboard-table td {

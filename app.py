@@ -205,11 +205,11 @@ def cb_select_patient(ids):
 def cb_switch_dashboard(moitored, manual):
     trigger = dash.callback_context.triggered[0]['prop_id']
     if 'monitored' in trigger:
-        return cstm.DashboardListMonitored(), {'border-bottom': '3px solid #3B72FF'}, {}
+        return cstm.DashboardListMonitored(), {'borderBottom': '3px solid #3B72FF'}, {}
     elif 'manual' in trigger:
-        return cstm.DashboardListManual(), {}, {'border-bottom': '3px solid #3B72FF'}
+        return cstm.DashboardListManual(), {}, {'borderBottom': '3px solid #3B72FF'}
     else:
-        return cstm.DashboardListMonitored(), {'border-bottom': '3px solid #3B72FF'}, {}
+        return cstm.DashboardListMonitored(), {'borderBottom': '3px solid #3B72FF'}, {}
 
 
 # profile switch callback
@@ -226,15 +226,15 @@ def cb_switch_profile(info, medical, food):
     GC_PID = flask.request.cookies.get('pid')
     patient = get_patient(GC_PID)
     if 'info' in trigger:
-        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
+        return cstm.ProfileTableInfo(patient), {'borderBottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
     elif 'medical' in trigger:
         medication = get_patient_medication(GC_PID)
-        return cstm.ProfileTableMedical(patient, medication), {}, {'border-bottom': '3px solid #3B72FF'}, {}, [{'display':'block'}]
+        return cstm.ProfileTableMedical(patient, medication), {}, {'borderBottom': '3px solid #3B72FF'}, {}, [{'display':'block'}]
     elif 'food' in trigger:
         diet = get_patient_diet(GC_PID)
-        return cstm.ProfileTableFood(patient, diet), {}, {}, {'border-bottom': '3px solid #3B72FF'}, [{'display':'none'}]
+        return cstm.ProfileTableFood(patient, diet), {}, {}, {'borderBottom': '3px solid #3B72FF'}, [{'display':'none'}]
     elif '.' in trigger:
-        return cstm.ProfileTableInfo(patient), {'border-bottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
+        return cstm.ProfileTableInfo(patient), {'borderBottom': '3px solid #3B72FF'}, {}, {}, [{'display':'none'}]
 
 
 # checklist switch callback
@@ -250,16 +250,16 @@ def cb_switch_profile(info, medical, food):
     GC_PID = flask.request.cookies.get('pid')
     patient = get_patient(GC_PID)
     if 'development' in trigger:
-        return cstm.ChecklistTableDevelopment(), {}, {}, {'border-bottom': '3px solid #3B72FF'}
+        return cstm.ChecklistTableDevelopment(), {}, {}, {'borderBottom': '3px solid #3B72FF'}
     elif 'medical' in trigger:
         medication = get_patient_medication(GC_PID)
-        return cstm.ChecklistTableMedication(medication), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+        return cstm.ChecklistTableMedication(medication), {'borderBottom': '3px solid #3B72FF'}, {}, {}
     elif 'food' in trigger:
         diet = get_patient_diet(GC_PID)
-        return cstm.ChecklistTableFood(diet), {}, {'border-bottom': '3px solid #3B72FF'}, {}
+        return cstm.ChecklistTableFood(diet), {}, {'borderBottom': '3px solid #3B72FF'}, {}
     elif '.' in trigger:
         medication = get_patient_medication(GC_PID)
-        return cstm.ChecklistTableMedication(medication), {'border-bottom': '3px solid #3B72FF'}, {}, {}
+        return cstm.ChecklistTableMedication(medication), {'borderBottom': '3px solid #3B72FF'}, {}, {}
 
 
 # add new entry buttons wildcard callback

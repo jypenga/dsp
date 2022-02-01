@@ -52,13 +52,13 @@ class Custom():
 
     def AppHeader(self, color=None, middle=None, middle_sub=None, top_left=None, top_left_sub=None, top_right=None, top_right_id='app-header-icon', dashboard=False, profile=False, checklist=False):
         if dashboard:
-            subheader = html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader')
+            subheader = html.Div([html.Button(html.H3('GEMONITORD'), id='dashboard-button-monitored', style={'borderBottom': '3px solid #3B72FF'}), html.Button(html.H3('HANDMATIG'), id='dashboard-button-manual')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
         elif profile:
-            subheader = html.Div([html.Button(html.H3('INFO'), id='profile-button-info', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('MEDISCH'), id='profile-button-medical'), html.Button(html.H3('VOEDING'), id='profile-button-food')], className='dashboard-subheader')
+            subheader = html.Div([html.Button(html.H3('INFO'), id='profile-button-info', style={'borderBottom': '3px solid #3B72FF'}), html.Button(html.H3('MEDISCH'), id='profile-button-medical'), html.Button(html.H3('VOEDING'), id='profile-button-food')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
         elif checklist:
-            subheader = html.Div([html.Button(html.H3('MEDICATIE'), id='checklist-button-medical', style={'border-bottom': '3px solid #3B72FF'}), html.Button(html.H3('VOEDING'), id='checklist-button-food'), html.Button(html.H3('ONTWIKKELING'), id='checklist-button-development')], className='dashboard-subheader')
+            subheader = html.Div([html.Button(html.H3('MEDICATIE'), id='checklist-button-medical', style={'borderBottom': '3px solid #3B72FF'}), html.Button(html.H3('VOEDING'), id='checklist-button-food'), html.Button(html.H3('ONTWIKKELING'), id='checklist-button-development')], className='dashboard-subheader')
             shadow = {'box-shadow': 'rgba(0, 0, 0, 0.15) 0px 0px 50px 0px'}
         else:
             subheader = None
@@ -136,7 +136,7 @@ class Custom():
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
                                                   html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
-                                                  html.Td(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}) for i in range(len(tables))]),
+                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className='dashboard-clickable-card') for i in range(len(tables))]),
                                                   className='dashboard-table')
         return content
 
@@ -148,7 +148,7 @@ class Custom():
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
                                                   html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
-                                                  html.Td(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}) for i in range(len(tables))]),
+                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className='dashboard-clickable-card') for i in range(len(tables))]),
                                                   className='dashboard-table')
         return content
 
