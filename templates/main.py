@@ -1,3 +1,4 @@
+from pickle import REDUCE
 import dash
 
 from dash import dcc
@@ -6,6 +7,10 @@ from dash import html
 import base64
 import svgwrite
 import numpy as np
+
+GREEN = '#3ABC6F'
+RED = '#FF3E3E'
+ORANGE = '#FFCD4B'
 
 
 class Custom():
@@ -142,24 +147,26 @@ class Custom():
 
     def DashboardListMonitored(self):
         tables = ['hartslag', 'saturatie', 'temperatuur', 'slaapscore', 'beweging']
+        status = ['', '-inactive', '-inactive', '', '']
         icons = ['heartbeat', 'saturation', 'temperature', 'sleep', 'activity']
         colors = ['#fff0f4', '#e6eaff', '#ecfaff', '#fffaed', '#e6f5da']
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
                                                   html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
-                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className='dashboard-clickable-card') for i in range(len(tables))]),
+                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className=f'dashboard-clickable-card{status[i]}') for i in range(len(tables))]),
                                                   className='dashboard-table')
         return content
 
 
     def DashboardListManual(self):
         tables = ['bloeddruk', 'glucose', 'medicatie', 'voeding']
+        status = ['', '-inactive', '-inactive', '-inactive']
         icons = ['blood-pressure', 'glucose', 'medication', 'food']
         colors = ['#ffecec', 'white', '#ecf9f1', '#f6fef9']
         content = html.Table(html.Tbody([html.Tr([html.Td(html.Img(src=self.app.get_asset_url(f'dashboard-icon-{icons[i]}.svg'), className='dashboard-icon'), className='dashboard-card-icon'), 
                                                   html.Td([html.H2(tables[i].title()), html.P('placeholder')], className='dashboard-card-text'), 
                                                   html.Td(html.Img(src=self.app.get_asset_url('smiley-positive.svg'), className='dashboard-card-smiley-score')), 
-                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className='dashboard-clickable-card') for i in range(len(tables))]),
+                                                  html.Td(dcc.Link(html.Img(src=self.app.get_asset_url('icon-chevron.svg'), className='dashboard-card-expand'), href=f'/{tables[i]}'))], style={'background': f'radial-gradient(circle 10vh at 4% 50%, {colors[i]} 70%, transparent 70%)'}, className=f'dashboard-clickable-card{status[i]}') for i in range(len(tables))]),
                                                   className='dashboard-table')
         return content
 
@@ -296,25 +303,24 @@ class Custom():
         return html.Img(src=self.app.get_asset_url('calendar.svg'))
 
 
-    def DataTable(self, hist, graph):
+    def DataTable(self, data):
 
-        subjects = ['Gem bpm rust', 'Gem bpm actief', 'Fitness level', 'Endurance']
+        subjects = [round(data['mean'], 0), round(data['trend'], 1)]
 
-        def block(subject, mean=False):
-            return html.Td(html.Div([html.Div([html.P(mean),html.P(mean)]), html.P(mean), html.P('ya')], className='app-data-card'))
-            
-            # #html.Table(html.Tbody([html.Tr([html.Td('Gemiddeld'), html.Td('Hoog')]),
-            #                              html.Tr([html.Td('yas', colSpan=2)]),
-            #                              html.Tr([html.Td('yas', colSpan=2)])]), className='app-data-card')
+        def block(subject, title, subtitle, color):
+            return html.Td(html.Div(html.Table(html.Tbody([html.Tr([html.Td(title, className='data-card-a'), html.Td(html.H4('Februari'), className='data-card-b')]),
+                                                  html.Tr([html.Td(subject, colSpan=2, className='data-card-info', style={'color':color})]),
+                                                  html.Tr([html.Td(subtitle, colSpan=2, className='data-card-info-sub')])]), className='app-sub-data-card'), className='app-data-card'))
         
+        color_a = GREEN
+        color_b = RED if data['trend'] < 0 else GREEN
+
         content = [html.H3('STATISTIEKEN'),
         html.Table(
            html.Tbody(
-               [html.Tr(html.Td(html.Div([html.H4('Januari'), *hist, *graph], className='app-main-data-card'), colSpan=2)),
-                html.Tr([block(subjects[0], 0), block(subjects[1])]),
-                html.Tr([block(subjects[2]), block(subjects[3])])]
-           ), className='app-data-table' 
-        )]
+               [html.Tr(html.Td(html.Div([html.H4('Februari'), *self.StepsHist(data), *self.StepsGraph(data, color_a)], className='app-main-data-card'), colSpan=2)),
+                html.Tr([block(subjects[0], 'Gemiddelde', 'stappen', color_a), block(subjects[1], 'Trend', 'stappen / dag', color_b)])]
+           ), className='app-data-table')]
 
         return content
 
@@ -472,3 +478,76 @@ class Custom():
             content += [h3]
             content += [cards]
         return content
+
+
+    def StepsHist(self, steps_data):
+        HEIGHT = 350
+        WIDTH = 980
+        
+        uppers = steps_data['hist_y']
+
+        drawing = svgwrite.Drawing(size=(WIDTH, HEIGHT), filename='assets/test.svg')
+
+        bar_width = 30
+
+        graph_height = HEIGHT - 40
+        graph_width = WIDTH - 40
+
+        upper_subset = uppers
+
+        scaling_factor = graph_height / np.max(upper_subset)
+
+        for i, (x, upper) in enumerate(zip(np.linspace(20, graph_width - (bar_width * 2 + 5), num=len(uppers)), upper_subset)):
+
+            a = 1
+            
+            upper_bar_height = int(np.floor(graph_height - upper * scaling_factor))
+            
+            drawing.add(drawing.polygon([(x, upper_bar_height), (x + bar_width, upper_bar_height), (x+bar_width, graph_height), (x, graph_height)], fill='#FFCD4B', opacity=a))
+
+            xs = steps_data['hist_x']
+            if i == 0:
+                drawing.add(drawing.text(f'{xs[i]}', (x - 5, HEIGHT), font_size='25pt', font_family='sans-serif', opacity=.5))
+            elif i % 3 == 0:
+                drawing.add(drawing.text(f'{xs[i]}', (x - 5, HEIGHT), font_size='25pt', font_family='sans-serif', opacity=.5))
+
+        drawing.save()
+
+        encoded = base64.b64encode(open('assets/test.svg','rb').read()) 
+        svg = 'data:image/svg+xml;base64,{}'.format(encoded.decode()) 
+        
+        return [html.Img(src=svg, className='steps-fig')]
+
+
+    def StepsGraph(self, steps_data, color):
+        HEIGHT = 350
+        WIDTH = 980
+        
+        uppers = steps_data['graph_y']
+
+        max_height = np.max(uppers)
+        uppers *= (HEIGHT/max_height)/1.5
+
+        drawing = svgwrite.Drawing(size=(WIDTH, HEIGHT), filename='assets/test.svg')
+        drawing.add(drawing.rect((0, 0), (WIDTH, HEIGHT), rx=40, ry=40, stroke=color, fill=color, opacity=.17))
+
+        gradient = svgwrite.gradients.LinearGradient(start=('0%', '100%'), end=('0%', '0%'), id='Gradient')
+        gradient.add_stop_color(offset=0, color=color, opacity=0.17)
+        gradient.add_stop_color(offset=1, color=color, opacity=0.83)
+        drawing.add(gradient)
+
+        xs = np.linspace(0, WIDTH, num=len(uppers))
+
+        drawing.add(drawing.polygon([(0, HEIGHT)] + [(int(x), HEIGHT - int(upper)) for x, upper in zip(xs, uppers)] + [(WIDTH, HEIGHT)], fill=gradient.get_paint_server()))
+        drawing.add(drawing.polyline([(int(x), HEIGHT - int(upper)) for x, upper in zip(xs, uppers)], stroke='white', stroke_width=7, fill='none'))
+
+        drawing.save()
+
+        encoded = base64.b64encode(open('assets/test.svg','rb').read()) 
+        svg_upper = 'data:image/svg+xml;base64,{}'.format(encoded.decode())
+        
+        return [html.Table(html.Tbody(html.Tr([html.Td('Per maand'), html.Td(html.Img(src=self.app.get_asset_url(f'icon-edit.svg')))])), className='data-fig-header'), 
+        html.Img(src=svg_upper, className='steps-fig'), 
+        html.Table(html.Tbody(html.Tr([html.Td('< Vorige')])), className='data-fig-previous'), 
+        html.Table(html.Tbody(html.Tr([html.Td('Volgende >')])), className='data-fig-next'), 
+    ]

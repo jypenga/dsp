@@ -28,12 +28,14 @@ from frames.checklist import CHECKLIST
 from frames.log import LOGS
 from frames.heartrate import HEARTRATE
 from frames.bloodpressure import BLOODPRESSURE
+from frames.steps import STEPS
 
 # import backend funcs
 from backend.register import register
 from backend.login import login
 from backend.select import *
 from backend.insert import *
+from backend.data import *
 
 cstm = Custom()
 
@@ -107,14 +109,20 @@ def display_page(path_1):
         patient = get_patients(pid)
         blood_pressure = None # TODO: db connection
         return BLOODPRESSURE(patient, blood_pressure)
+    elif check_path('/beweging') and uid and pid:
+        patient = get_patients(pid)
+        steps_data = get_steps_data(pid)
+        return STEPS(today, patient, steps_data)
     # if first time login, but no patient selected, redirect to patients
     elif not pid:
         name = get_name(uid)
         patients = get_patients(uid)
         return PATIENTS(name, patients)
     # if not logged in, redirect to login
-    else:
+    elif not uid:
         return LOGIN
+    else:
+        return [html.P('Error 501: Not Implemented')]
 
 
 # notifications wildcard callback
@@ -291,7 +299,6 @@ def cb_add_entry(n_clicks_add, n_clicks_close, n_clicks_save, dates, inputs):
         patients = get_patients(uid)
         pids = [patient[0] for patient in patients]
         scores = [get_patient_score(pid) for pid in pids]
-        print(scores)
         page = (cstm.PatientTable(patients, scores), )
 
     content = [], {}, {}, page

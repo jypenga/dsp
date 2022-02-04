@@ -129,7 +129,7 @@ a {
 .app-header {
   min-height: 32%;
   min-width: 100%;
-  background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, white 70%);
+  background: radial-gradient(circle 62vh at 50% -52%, #3B72FF 70%, transparent 70%);
   position: fixed;
   z-index: 10;
 }
@@ -562,6 +562,7 @@ input[type=checkbox] {
   font-size: 25pt;
   font-weight: 700;
   width: 90%;
+  border-bottom: 200px solid transparent;
 }
 
 .app-main-data-card {
@@ -874,7 +875,7 @@ h3 {
   margin-top: -5.5%;
 }
 
-.blood-pressure-fig {
+.blood-pressure-fig, .steps-fig {
   width: 95%;
   padding: 2.5%;
 }
@@ -917,9 +918,32 @@ h3 {
   color: gray;
   float: left;
 }
+
 .data-fig-next {
   padding-right: 2.5%;
   font-size: 22pt;
   color: gray;
   float: right;
+}
+
+.app-sub-data-card {
+  width: 100%;
+}
+
+.data-card-a, .data-card-info-sub {
+  font-size: 22pt;
+  color: gray;
+}
+
+.data-card-b h4 {
+  text-align: right;
+}
+
+.data-card-info {
+  font-size: 44pt;
+  border-bottom: 15px solid transparent;
+}
+
+.dashboard-clickable-card-inactive {
+  opacity: .3;
 }

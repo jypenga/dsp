@@ -108,3 +108,19 @@ def get_patient_score(conn, id):
     except Error as e:
         print(e)
     return ret
+
+@with_connection(db=PATH)
+def get_all_patient_vitals(conn, id):
+    sql = """SELECT * FROM data WHERE patient=? ORDER BY id DESC;"""
+    ret = []
+    if not id:
+        return ret
+    try:
+        c = conn.cursor()
+        c.execute(sql, (id, ))
+        ret = c.fetchall()
+        if len(ret) == 0:
+            ret = []
+    except Error as e:
+        print(e)
+    return ret
